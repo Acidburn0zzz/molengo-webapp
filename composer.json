@@ -1,0 +1,24 @@
+{
+    "name": "odan/molengo-webapp",
+    "type": "project",
+    "description": "Molengo WebApp",
+    "keywords": ["project"],
+    "homepage": "http://github.com/odan/molengo-webapp",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "odan",
+            "email": "odan@molengo.com",
+            "homepage": "http://www.molengo.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "odan/molengo": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "app/"
+        }
+    }
+}
