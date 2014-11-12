@@ -25,9 +25,6 @@ class App extends \Molengo\WebApp
         // set debug modus
         define('G_DEBUG', self::getRequest()->isLocalhost());
 
-        // error reporting and handler
-        self::initErrorHandling();
-
         if (G_DEBUG) {
             // dev database
             self::set('db.dsn', 'mysql:host=127.0.0.1;port=3306;dbname=molengo_webapp;username=root;password=');
