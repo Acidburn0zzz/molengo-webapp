@@ -4,7 +4,7 @@ namespace Model\Index;
 
 use App;
 
-class TestModel extends \Model\AppModel
+class IndexModel extends \Model\AppModel
 {
 
     public function getById($numId)
