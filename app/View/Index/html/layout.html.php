@@ -18,7 +18,7 @@
         <div class="container">
             <div class="header">
                 <ul class="nav nav-pills pull-right">
-                    <?php if (App::getUser()->acl('admin')) : ?>
+                    <?php if (App::getUser()->is('ROLE_ADMIN')) : ?>
                         <li class="active"><a href="#"><?php wh(__('Admin')); ?></a></li>
                     <?php endif ?>
                     <li class="active"><a href="login"><?php wh(__('Logout')); ?></a></li>

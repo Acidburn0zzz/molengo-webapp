@@ -31,8 +31,8 @@ class LoginController extends AppController
             $arrLogin['username'] = $req->param('username', 'p');
             $arrLogin['password'] = $req->param('password', 'p');
 
-            $arrReturn = $user->login($arrLogin);
-            if ($arrReturn['status'] == 1) {
+            $boolReturn = $user->login($arrLogin);
+            if ($boolReturn) {
                 $res->redirectBase('/');
             } else {
                 $res->redirectBase('login');
