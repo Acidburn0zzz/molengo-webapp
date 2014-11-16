@@ -5,7 +5,8 @@ class App extends \Molengo\WebApp
 
     /**
      * Init configuration
-     * @return boolean
+     *
+     * @return void
      */
     public static function init()
     {
@@ -68,26 +69,5 @@ class App extends \Molengo\WebApp
 
         // init all objects
         self::initAll();
-
-        return true;
-    }
-
-    /**
-     * Init Router and define url mappings
-     */
-    protected static function initRouter()
-    {
-        $router = self::getRouter();
-        $router->addIndexRule();
-        $router->addAssetRule();
-        $router->addControllerRule();
-    }
-
-    /**
-     * Start application
-     */
-    public static function run()
-    {
-        self::getRouter()->run();
     }
 }
