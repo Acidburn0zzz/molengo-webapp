@@ -1,6 +1,6 @@
 <div class="jumbotron">
-    <h1><?php wh(__('DEMO')); ?></h1>
-    <p class="lead"><?php wh(__('Demo Web-App')); ?></p>
+    <h1><?php wh(__('WebApp')); ?></h1>
+    <p class="lead"><?php wh(__('Welcome')); ?></p>
 </div>
 
 <div class="bgimg"></div>
