@@ -12,3 +12,11 @@ After you install Composer, run this command from the directory in which you wan
 
 
 * Ensure `log/`, `tmp/`, `cache/` and are web writeable.
+
+* Create a local MySQL database e.g. "molengo_webapp" and run app/Migration/master.sql and master_fixture.sql
+
+* Open app/App.php and customize "db.dsn" database connection string (e.g. dbname, username and password)
+
+* Open the browser: http://localhost/molengo-webapp
+
+* Login with admin/admin or user/user
