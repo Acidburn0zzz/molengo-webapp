@@ -736,6 +736,20 @@ $d.getBaseUrl = function(sPath) {
 };
 
 /**
+ * Returns URL parameters as object (8648892)
+ *
+ * @returns {Object}
+ */
+$d.urlParams = function () {
+    var search = location.search.substring(1);
+    var query = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+            function (key, value) {
+                return key === "" ? value : decodeURIComponent(value);
+            }) : {};
+    return query;
+};
+
+/**
  * Returns url parameter by name
  *
  * @param {string} name
