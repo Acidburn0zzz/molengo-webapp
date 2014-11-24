@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-// Version: 2014.06.11
+// Version: 14.11.24.0
 
 /**
  * Checks if the variable is empty
@@ -1607,26 +1607,60 @@ $d.showFile = function(config, callback) {
 
 };
 
-// return all form elements as object
-// inspired by jquery.formparams.js
-$d.getForm = function(id) {
-
-    var o = {};
-    var a = $(id).serializeArray();
-    var keyBreaker = /[^\[\]]+/g;
-
+/**
+ * Returns all form elements as object
+ * inspired by jquery.formparams.js
+ *
+ * @param {object} id
+ * @returns {unresolved}
+ */
+$d.getForm = function (id) {
+    // get form elements as array
+    var arr = $(id).serializeArray();
+    
     // Because serializeArray() ignores unset checkboxes and radio buttons
-    a = a.concat(
-            jQuery(id).find('input[type=checkbox]:not(:checked)').map(
-            function() {
+    arr = arr.concat(
+            $(id).find('input[type=checkbox]:not(:checked)').map(
+            function () {
                 var ret = {
-                    'name': this.name,
-                    'value': 0 // this.value
+                    name: this.name,
+                    value: 0
                 };
                 return ret;
             }).get());
 
-    $(a).each(function(n, el) {
+    var obj = $d.serializeObject(arr);
+    return obj;
+};
+
+/**
+ * Returns selected form elements text as an object of names and values
+ *
+ * @param {object} selector
+ * @returns {object}
+ */
+$d.getFormText = function (selector) {
+    var arr = $(selector).find('select option:selected').map(function () {
+        var ret = {
+            name: $(this).parent().attr('name'),
+            value: $(this).text()
+        };
+        return ret;
+    }).get();
+    var obj = $d.serializeObject(arr);
+    return obj;
+};
+
+/**
+ * Encode a array of form elements as an object of names and values.
+ *
+ * @param {array} arr
+ * @returns {object}
+ */
+$d.serializeObject = function (arr) {
+    var o = {};
+    var keyBreaker = /[^\[\]]+/g;
+    $(arr).each(function (n, el) {
 
         var current;
         var key = el.name;
