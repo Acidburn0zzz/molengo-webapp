@@ -486,10 +486,42 @@ $d.isEmail = function(email) {
     return re.test(email);
 };
 
+/**
+ * Escape URI parameters
+ *
+ * @param {string} string
+ * @return {string}
+ */
 $d.encodeUrl = function(str) {
     str = (str + '').toString();
     str = encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').
             replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+    return str;
+};
+
+/**
+ * Escape HTML tag attribute
+ *
+ * @param {String} str
+ * @returns {String}
+ */
+$d.encodeAttr = function (str) {
+    if (!isset(str)) {
+        return '';
+    }
+
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
+    str = str.toString().replace(/[&<>"']/g, function (m) {
+        return map[m];
+    });
+
     return str;
 };
 
@@ -504,7 +536,8 @@ $d.decodeUrl = function(s) {
 };
 
 /**
- * encodes characters that are "reserved" in HTML.
+ * Escape HTML characters
+ * 
  * @param {string} str
  * @returns {string}
  */
@@ -1063,57 +1096,54 @@ $d.openFile = function(strKey) {
 
 /**
  * Template parser
- * 
+ *
+ * @syntax {placeholder|filter}
+ *
+ * The filter is optional and by default html.
+ *
+ * Valid filters are:
+ *
+ * - html (default)      e.g. {placeholder|html}
+ * - raw  (no encoding)  e.g. {placeholder|raw}
+ * - url  (url encoding) e.g. {placeholder|url}
+ * - attr (html attribute encoding) e.g. {placeholder|attr}
+ *
  * @example
- * 
- * var strTpl = '<div>{placeholder}</div>';
- * 
- * var data = {
- *      'placeholder': 'hello world'
- * };
- * 
+ *
  * // default html encoding
+ * var strTpl = '<div>{placeholder}</div>';
+ * var data = {
+ *      placeholder: 'hello world'
+ * };
+ *
+ * // render template
  * var strHtml = $d.template(strTpl, data);
- * 
- * // no encoding
- * var strHtml = $d.template(strTpl, data, false);
- * or
- * var strHtml = $d.template(strTpl, data, {html: false});
- * 
- * // user defined encoding
- * var strHtml = $d.template(strTpl, data, {encoding: $d.encodeBase64});
- * 
+ *
  * @param {string} strHtml html string
  * @param {object} data
- * @param {object} [options] encoding handler, default is $d.encodeHtml
  * @returns {string}
  */
-$d.template = function(strHtml, data, options) {
-
-    if (typeof options === 'boolean') {
-        options = {
-            html: options
-        };
-    } else {
-        options = options || {
-            html: true
-        };
-    }
-
-    if (empty(data)) {
-        data = {};
-    }
-
+$d.template = function (strHtml, data) {
     // interpolate replacement values into the string and return
-    strHtml = strHtml.replace(/\{\w+\}/g, function(key) {
+    strHtml = strHtml.replace(/\{(\w+)\|?(raw|html|url|attr)?}/g, function (match, key, filter) {
+        filter = filter || 'html';
         var str = '';
-        key = key.replace('{', '').replace('}', '');
-        if (key in data && options.html) {
-            str = $d.encodeHtml(data[key]);
+        if (key in data) {
+            if (filter === 'html') {
+                str = $d.encodeHtml(data[key]);
+            }
+            if (filter === 'raw') {
+                str = data[key];
+            }
+            if (filter === 'url') {
+                str = $d.encodeUrl(data[key]);
+            }
+            if (filter === 'attr') {
+                str = $d.encodeAttr(data[key]);
+            }
         }
         return str;
     });
-
     return strHtml;
 };
 
