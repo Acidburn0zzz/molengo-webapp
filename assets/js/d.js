@@ -198,7 +198,7 @@ $d.rpc = function(method, params, fncDone, fncError) {
     var strUrl = ctrl + '/rpc';
     var id = 'a' + Math.floor(Math.random() * 9999999) + 1;
     var method = parts[1];
-    
+
     var request = {
         jsonrpc: '2.0',
         id: id,
@@ -505,7 +505,7 @@ $d.encodeUrl = function(str) {
  * @param {String} str
  * @returns {String}
  */
-$d.encodeAttr = function (str) {
+$d.encodeAttr = function(str) {
     if (!isset(str)) {
         return '';
     }
@@ -518,7 +518,7 @@ $d.encodeAttr = function (str) {
         "'": '&#039;'
     };
 
-    str = str.toString().replace(/[&<>"']/g, function (m) {
+    str = str.toString().replace(/[&<>"']/g, function(m) {
         return map[m];
     });
 
@@ -773,10 +773,10 @@ $d.getBaseUrl = function(sPath) {
  *
  * @returns {Object}
  */
-$d.urlParams = function () {
+$d.urlParams = function() {
     var search = location.search.substring(1);
     var query = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-            function (key, value) {
+            function(key, value) {
                 return key === "" ? value : decodeURIComponent(value);
             }) : {};
     return query;
@@ -1123,9 +1123,9 @@ $d.openFile = function(strKey) {
  * @param {object} data
  * @returns {string}
  */
-$d.template = function (strHtml, data) {
+$d.template = function(strHtml, data) {
     // interpolate replacement values into the string and return
-    strHtml = strHtml.replace(/\{(\w+)\|?(raw|html|url|attr)?}/g, function (match, key, filter) {
+    strHtml = strHtml.replace(/\{(\w+)\|?(raw|html|url|attr)?}/g, function(match, key, filter) {
         filter = filter || 'html';
         var str = '';
         if (key in data) {
@@ -1644,14 +1644,14 @@ $d.showFile = function(config, callback) {
  * @param {object} id
  * @returns {unresolved}
  */
-$d.getForm = function (id) {
+$d.getForm = function(id) {
     // get form elements as array
     var arr = $(id).serializeArray();
-    
+
     // Because serializeArray() ignores unset checkboxes and radio buttons
     arr = arr.concat(
             $(id).find('input[type=checkbox]:not(:checked)').map(
-            function () {
+            function() {
                 var ret = {
                     name: this.name,
                     value: 0
@@ -1669,8 +1669,8 @@ $d.getForm = function (id) {
  * @param {object} selector
  * @returns {object}
  */
-$d.getFormText = function (selector) {
-    var arr = $(selector).find('select option:selected').map(function () {
+$d.getFormText = function(selector) {
+    var arr = $(selector).find('select option:selected').map(function() {
         var ret = {
             name: $(this).parent().attr('name'),
             value: $(this).text()
@@ -1687,10 +1687,10 @@ $d.getFormText = function (selector) {
  * @param {array} arr
  * @returns {object}
  */
-$d.serializeObject = function (arr) {
+$d.serializeObject = function(arr) {
     var o = {};
     var keyBreaker = /[^\[\]]+/g;
-    $(arr).each(function (n, el) {
+    $(arr).each(function(n, el) {
 
         var current;
         var key = el.name;
@@ -2387,10 +2387,10 @@ $d.loadElements = function(array, callback) {
  * 
  * <code>
  * $d.notify({
-*    msg: "<b>Ok</b> Saved succesfully!",
-*    type: "success",
-*    position: "center"
-* });
+ *    msg: "<b>Ok</b> Saved succesfully!",
+ *    type: "success",
+ *    position: "center"
+ * });
  * </code>
  */
 $d.notify = function(options) {
