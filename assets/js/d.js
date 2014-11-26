@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-// Version: 14.11.24.0
+// Version: 14.11.26.0
 
 /**
  * Checks if the variable is empty
@@ -68,25 +68,30 @@ function blank(v) {
 
 /**
  * Get value by key from object
+ * Accessing nested objects with key
+ * e.g. part1.name or someObject.part1.name
+ *
  * @param {object} obj
- * @param {string} key
- * @param {object} default_value
+ * @param {string} strKey
+ * @param {object} mixDefault (optional)
  * @returns {object}
  */
-function gv(obj, key, default_value) {
-    default_value = isset(default_value) ? default_value : '';
+function gv(obj, strKey, mixDefault) {
     if (!isset(obj) || typeof obj !== 'object') {
-        return default_value;
+        return mixDefault;
     }
-
-    if (!(key in obj)) {
-        return default_value;
+    // strip a leading dot
+    strKey = strKey.replace(/^\./, '');
+    var a = strKey.split('.');
+    while (a.length) {
+        var n = a.shift();
+        if (n in obj) {
+            obj = obj[n];
+        } else {
+            return mixDefault;
+        }
     }
-    var val = obj[key];
-    if (!isset(val)) {
-        return default_value;
-    }
-    return val;
+    return obj;
 }
 
 function trim(s) {
@@ -1097,16 +1102,22 @@ $d.openFile = function(strKey) {
 /**
  * Template parser
  *
- * @syntax {placeholder|filter}
+ * @syntax {placeholder|encoding}
+ *
+ * With placeholder you can access nested objects with string key:
+ * {placeholder.part1.name}
+ *
+ * You can also combine a nested object key with encoding:
+ * {placeholder.part1.id|url}
  *
  * The filter is optional and by default html.
  *
- * Valid filters are:
+ * Valid encoding filters are:
  *
  * - html (default)      e.g. {placeholder|html}
+ * - attr (html attribute encoding) e.g. {placeholder|attr}
  * - raw  (no encoding)  e.g. {placeholder|raw}
  * - url  (url encoding) e.g. {placeholder|url}
- * - attr (html attribute encoding) e.g. {placeholder|attr}
  *
  * @example
  *
@@ -1125,24 +1136,22 @@ $d.openFile = function(strKey) {
  */
 $d.template = function(strHtml, data) {
     // interpolate replacement values into the string and return
-    strHtml = strHtml.replace(/\{(\w+)\|?(raw|html|url|attr)?}/g, function(match, key, filter) {
-        filter = filter || 'html';
-        var str = '';
-        if (key in data) {
-            if (filter === 'html') {
-                str = $d.encodeHtml(data[key]);
-            }
-            if (filter === 'raw') {
-                str = data[key];
-            }
-            if (filter === 'url') {
-                str = $d.encodeUrl(data[key]);
-            }
-            if (filter === 'attr') {
-                str = $d.encodeAttr(data[key]);
-            }
+    strHtml = strHtml.replace(/\{([\w\.]+)\|?(raw|html|url|attr)?}/g, function(match, key, encoding) {
+        encoding = encoding || 'html';
+        var v = gv(data, key, '');
+        if (v === '' || encoding === 'raw') {
+            return v;
         }
-        return str;
+        if (encoding === 'html') {
+            v = $d.encodeHtml(v);
+        }
+        if (encoding === 'url') {
+            v = $d.encodeUrl(v);
+        }
+        if (encoding === 'attr') {
+            v = $d.encodeAttr(v);
+        }
+        return v;
     });
     return strHtml;
 };
