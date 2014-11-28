@@ -1804,18 +1804,12 @@ $d.loadForm = function(options) {
             continue;
         }
         var strValue = options.data[strKey];
-        if (strValue === true) {
-            strValue = '1';
-        }
-        if (strValue === false) {
-            strValue = '0';
-        }
         var strType = $(field).attr('type');
         var strTagName = $(field).get(0).tagName.toLowerCase();
 
         if (strTagName === 'input') {
             if ((strType === 'checkbox') || (strType === 'radio')) {
-                $(field).filter("[value='" + $d.jq(strValue) + "']").prop('checked', true);
+                $d.setCheckedByValue(field, strValue, true);
             } else {
                 $(field).val(strValue);
                 // for bootstrap modal
@@ -1982,7 +1976,7 @@ $d.loadDropdown = function(dropdown) {
 };
 
 /**
- * Set radio checked status by value
+ * Set checkbox/radio checked status by value
  *
  * @param {object} el
  * @param {string} strName
@@ -1990,12 +1984,12 @@ $d.loadDropdown = function(dropdown) {
  * @param {boolean} boolChecked
  * @returns {object}
  */
-$d.setRadioByValue = function(el, strName, strValue, boolChecked) {
+$d.setCheckedByValue = function(selector, strValue, boolChecked) {
     boolChecked = typeof boolChecked === 'undefined' ? true : boolChecked;
     if (typeof strValue === 'boolean') {
         strValue = strValue ? '1' : '0';
     }
-    var chk = $d.getField(el, strName).filter('[value=' + strValue + ']');
+    var chk = $(selector).filter('[value=' + strValue + ']');
     chk.prop('checked', boolChecked);
     chk.trigger("change");
     return chk;
