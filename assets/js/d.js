@@ -1764,16 +1764,16 @@ $d.getFieldName = function(el) {
  * @param {Object} options
  * options.name - Select elements by name with name[key]. default = field
  * options.data - Form values (key, value)
- * options.context - A DOM Element, Document, or jQuery to use as context
+ * options.form - A DOM Element, Document, or jQuery to use as context
  * @returns {unresolved}
  */
 $d.loadForm = function(options) {
 
     // overwrite default options 
     options = $.extend({
-        'name': 'data',
-        'data': null,
-        'context': window.document
+        name: 'data',
+        data: null,
+        form: window.document
     },
     options);
 
@@ -1784,43 +1784,46 @@ $d.loadForm = function(options) {
     for (var strKey in options.data) {
 
         // select element by attribute (name) 
-        var field = $(options.context).find('[name="' + options.name + '\\[' + strKey + '\\]"]');
+        var field = $(options.form).find('[name="' + options.name + '\\[' + strKey + '\\]"]');
 
         if (!field.length) {
 
             if (typeof options.data[strKey] === 'object') {
                 // search for table with data-source
-                field = $(options.context).find('table[data-datasource="' + strKey + '"]');
+                field = $(options.form).find('table[data-datasource="' + strKey + '"]');
 
                 if (field.length) {
                     // fill table
                     $d.loadTable({
-                        'name': strKey,
-                        'control': field,
-                        'rows': options.data[strKey]
+                        name: strKey,
+                        control: field,
+                        rows: options.data[strKey]
                     });
                 }
             }
             continue;
         }
         var strValue = options.data[strKey];
-
+        if (strValue === true) {
+            strValue = '1';
+        }
+        if (strValue === false) {
+            strValue = '0';
+        }
         var strType = $(field).attr('type');
         var strTagName = $(field).get(0).tagName.toLowerCase();
 
         if (strTagName === 'input') {
             if ((strType === 'checkbox') || (strType === 'radio')) {
-                $(field).prop('checked', strValue === '1');
+                $(field).filter("[value='" + $d.jq(strValue) + "']").prop('checked', true);
             } else {
                 $(field).val(strValue);
-
                 // for bootstrap modal
                 $(field).attr('value', strValue);
             }
         }
 
         if (strTagName === 'textarea') {
-            //$(field).val(strValue);
             // for bootstrap modal
             $(field).html(strValue);
         }
@@ -1834,16 +1837,16 @@ $d.loadForm = function(options) {
         }
     }
 
-    return $(options.context);
+    return $(options.form);
 };
 
 $d.loadTable = function(options) {
 
     // overwrite default settings 
     options = $.extend({
-        'name': 'data',
-        'control': null,
-        'rows': null
+        name: 'data',
+        control: null,
+        rows: null
     },
     options);
 
@@ -1878,9 +1881,9 @@ $d.loadTable = function(options) {
         var elRow = $(strNewRow2);
 
         $d.loadForm({
-            'name': options.name + '[' + numRow + ']',
-            'context': elRow,
-            'data': row
+            name: options.name + '[' + numRow + ']',
+            form: elRow,
+            data: row
         });
 
         $(el).find("tbody:last").append(elRow);
