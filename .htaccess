@@ -1,19 +1,9 @@
-<Ifmodule mod_rewrite.c>
-#Options +FollowSymlinks
-
 RewriteEngine On
 
 # Security rules
 RewriteRule ^(composer\.|LICENSE|README\.|\.) - [L,R=404]
 
-# Do not do anything for already existing files, folders and symbolic links
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d [OR]
-RewriteCond %{REQUEST_FILENAME} -s 
-RewriteRule .+ - [L]
-
-# Redirect to Front controller
+# Redirect to front controller
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [QSA,L]
-
-</Ifmodule>
