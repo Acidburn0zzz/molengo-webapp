@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-// Version: 14.11.26.0
+// Version: 14.12.01.0
 
 /**
  * Checks if the variable is empty
@@ -2031,17 +2031,23 @@ $d.resetValidation = function(element) {
     });
 };
 
-// set validation styles for errors, warning and success. 
-$d.setValidation = function(element, style, msg, type) {
-
-    //var obj = $(element).closest('.form-group');
-    var obj = $(element).closest('div');
+/**
+ * set validation styles for errors, warning and success
+ * 
+ * @param {object} selector
+ * @param {string} style success, warning, error
+ * @param {string} msg message
+ * @param {string} type '' or tooltip
+ * @returns {undefined}
+ */
+$d.setValidation = function(selector, style, msg, type) {
+    var obj = $(selector).closest("div[class*='col-']");
     if (!obj.length) {
         return;
     }
 
     if (type === 'tooltip' && msg) {
-        $(element).tooltip({
+        $(selector).tooltip({
             'title': msg
         });
     }
@@ -2056,7 +2062,6 @@ $d.setValidation = function(element, style, msg, type) {
     if (help.length) {
         $(help).text(msg);
     }
-
 };
 
 /**
@@ -2088,7 +2093,19 @@ $d.validateRequiredFields = function(form) {
     var boolValid = true;
     $(form).find("[required='required']").each(function() {
         var elField = $(this);
-        if (blank(trim(elField.val()))) {
+        var v = '';
+        var strType = elField[0].type;
+        if (strType === 'radio' || strType === 'checkbox') {
+            var strName = $d.jq(elField[0].name);
+            var strSel = "input:" + strType + "[name='" + strName + "']:checked";
+            var checked = $(form).find(strSel);
+            if (checked.length > 0) {
+                v = checked.val();
+            }
+        } else {
+            v = elField.val();
+        }
+        if (blank(trim(v))) {
             if (boolValid) {
                 $(elField).focus();
             }
