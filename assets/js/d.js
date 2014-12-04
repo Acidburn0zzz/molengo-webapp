@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-// Version: 14.12.01.0
+// Version: 14.12.04.0
 
 /**
  * Checks if the variable is empty
@@ -94,12 +94,19 @@ function gv(obj, strKey, mixDefault) {
     return obj;
 }
 
+/**
+ * Trim
+ * 
+ * @param {String} s
+ * @returns {String}
+ */
 function trim(s) {
     return $.trim(gs(s));
 }
 
 /**
  * Convert object to string (get string)
+ * 
  * @param {object} o
  * @returns {string}
  */
@@ -112,6 +119,7 @@ function gs(o) {
 
 /**
  * Html encoding
+ * 
  * @param {string} str
  * @returns {string} html encoded string
  */
@@ -121,6 +129,7 @@ function gh(str) {
 
 /**
  * Url encoding (get url)
+ * 
  * @param {string} str
  * @returns {string}
  */
@@ -130,6 +139,7 @@ function gu(str) {
 
 /**
  * HTML Attribute Encoding
+ * 
  * @param {string} str string to encode
  * @returns {string}
  */
@@ -138,7 +148,8 @@ function ga(str) {
 }
 
 /**
- * gettext (translation)
+ * Gettext (translation)
+ * 
  * @param {string} str
  * @param {object} replace
  * @returns {string}
@@ -172,6 +183,7 @@ $d.fn = {};
 
 /**
  * Console logging
+ * 
  * @param {string} msg
  * @returns {void}
  */
@@ -187,6 +199,7 @@ $d.log = function(msg) {
 
 /**
  * JSON-RPC 2.0 Call
+ * 
  * @param {string} method
  * @param {object} params | fncDone
  * @param {function} fncDone | fncError
@@ -247,6 +260,7 @@ $d.rpc = function(method, params, fncDone, fncError) {
 
 /**
  * Check response object for error and show error message
+ * 
  * @param {object} response
  * @returns {boolean}
  */
@@ -333,7 +347,7 @@ $d.copyObject = function(obj) {
 
 /**
  * Return value of character
- * 
+ *
  * @example
  * example 1: ord('K'); // returns 1: 75
  * example 2: ord('\uD800\uDC00'); // surrogate pair to create a single Unicode character
@@ -365,7 +379,8 @@ $d.ord = function(str) {
 };
 
 /**
- * return a specific character
+ * Return a specific character
+ * 
  * @param {string} code
  * @returns {string}
  */
@@ -384,7 +399,8 @@ $d.chr = function(code) {
 };
 
 /**
- * convert object to integer (default base = 10)
+ * Convert object to integer (default base = 10)
+ * 
  * @param {*} obj
  * @param {number} base
  * @returns {number}
@@ -406,7 +422,8 @@ $d.getInt = function(obj, base) {
 };
 
 /**
- * check for unsigned integer
+ * Check for unsigned integer
+ * 
  * @param {number} num
  * @returns {boolean}
  */
@@ -418,7 +435,8 @@ $d.isInt = function(num) {
 };
 
 /**
- *  check for signed integer
+ * Check for signed integer
+ * 
  * @param {number} num
  * @returns {boolean}
  */
@@ -433,7 +451,7 @@ $d.isInteger = function(num) {
 };
 
 /**
- * check for signed float
+ * Check for signed float
  * http://stackoverflow.com/questions/3941052
  * 
  * @param {number} num
@@ -447,7 +465,8 @@ $d.isFloat = function(num) {
 };
 
 /**
- * validate numbers
+ * Validate numbers
+ * 
  * @param {number} num
  * @returns {boolean}
  */
@@ -459,7 +478,7 @@ $d.isNumeric = function(num) {
 };
 
 /**
- * check for valid date (dd.mm.yyyy)
+ * Check for valid date (dd.mm.yyyy)
  * 
  * @param {string} str
  * @returns {boolean}
@@ -479,7 +498,8 @@ $d.isDate = function(str) {
 };
 
 /**
- * check for valid email address
+ * Check for valid email address
+ * 
  * @param {string} email
  * @returns {boolean}
  */
@@ -532,6 +552,7 @@ $d.encodeAttr = function(str) {
 
 /**
  * Url decoding
+ * 
  * @param {string} s
  * @returns {string}
  */
@@ -558,7 +579,8 @@ $d.encodeHtml = function(str) {
 };
 
 /**
- * extrace text from html
+ * Remove HTML end return text
+ * 
  * @param {string} s
  * @returns {string}
  */
@@ -569,7 +591,11 @@ $d.removeHtml = function(s) {
     return s.toString().replace(/<[^>]*>/g, '');
 };
 
-
+/**
+ * Return UUID
+ * 
+ * @returns {String}
+ */
 $d.uuid = function() {
     function s4() {
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -601,6 +627,7 @@ $d.decodeUtf8 = function(s) {
 
 /**
  * Json encoder
+ * 
  * @param {object} obj
  * @returns {string}
  */
@@ -619,6 +646,7 @@ $d.encodeJson = function(obj) {
 
 /**
  * Json decoder
+ * 
  * @param {string} str
  * @returns {object}
  */
@@ -634,6 +662,7 @@ $d.decodeJson = function(str) {
 
 /**
  * Interpolates context values into the message placeholders.
+ * 
  * @param {string} str
  * @param {object} replacePairs
  * @returns {string}
@@ -650,7 +679,8 @@ $d.interpolate = function(str, replacePairs) {
 };
 
 /**
- * left padding
+ * Left padding
+ * 
  * @param {string} str
  * @param {number} nLen
  * @param {string} sChar
@@ -667,6 +697,7 @@ $d.padLeft = function(str, nLen, sChar) {
 
 /**
  * The most recent unique ID.
+ * 
  * @type {number}
  */
 $d.cfg.uniqueid = Math.random() * 0x80000000 | 0;
@@ -674,6 +705,7 @@ $d.cfg.uniqueid = Math.random() * 0x80000000 | 0;
 /**
  * Generates and returns a string which is unique in the current document.
  * This is useful, for example, to create unique IDs for DOM elements.
+ * 
  * @param {string} strPrefix optional
  * @return {string} A unique id.
  */
@@ -685,6 +717,7 @@ $d.createId = function(strPrefix) {
 
 /**
  * Escape jQuery selector
+ * 
  * @param {string} str
  * @returns {string}
  */
@@ -715,7 +748,7 @@ $d.redirect = function(strUrl, boolReplace) {
 
 
 /**
- * detect absolute URL from path 
+ * Returns absolute URL from path 
  * 
  * <base href="http://domain.tld/">
  * $d.getBaseUrl('contact');
@@ -858,12 +891,13 @@ $d.isValidDateObject = function(date) {
 };
 
 /**
- * text translation (i18n)
+ * Text translation (i18n)
  */
 $d.cache.text = {};
 
 /**
- * set text array
+ * Set text array
+ * 
  * @param {object} o
  */
 $d.setText = function(o) {
@@ -872,6 +906,7 @@ $d.setText = function(o) {
 
 /**
  * Set text value
+ * 
  * @param {string} strKey
  * @param {string} strValue
  */
@@ -880,7 +915,8 @@ $d.setTextValue = function(strKey, strValue) {
 };
 
 /**
- * set text array
+ * Set text array
+ * 
  * @param {object} o
  */
 $d.addText = function(o) {
@@ -896,6 +932,7 @@ $d.clearText = function() {
 
 /**
  * Get Text
+ * 
  * @param {string} strMessage
  * @param {object} objReplace
  * @returns {string}
@@ -923,7 +960,8 @@ $d.getText = function(strMessage, objReplace) {
 
 
 /**
- * detect browser language
+ * Returns browser language
+ * 
  * @returns {string}
  */
 $d.getLanguage = function() {
@@ -947,7 +985,8 @@ $d.getLanguage = function() {
 };
 
 /**
- * Detect User Agent
+ * Returns user agent
+ * 
  * @returns {string} chrome,ie,firefox,safari,opera or '' (another browser)
  */
 $d.getBrowser = function() {
@@ -981,6 +1020,12 @@ $d.getBrowser = function() {
     return '';
 };
 
+/**
+ * Returns true if browser
+ * 
+ * @param {string} browser
+ * @returns {boolean}
+ */
 $d.isBrowser = function(browser) {
     return $d.getBrowser() === browser;
 };
@@ -988,6 +1033,7 @@ $d.isBrowser = function(browser) {
 /**
  * Returns the version of Internet Explorer or a -1
  * (indicating the use of another browser).
+ * 
  * @returns {float}
  */
 $d.getIeVersion = function() {
@@ -1170,13 +1216,13 @@ $d.template = function(strHtml, data) {
 $d.window = function(config) {
 
     config = $.extend({
-        'title': false,
-        'body': '',
-        'buttons': [],
-        'focus': 'first'
-                // 'width': '560px'
-                // 'height': '400px',
-                // 'maxheight': '400px'
+        title: false,
+        body: '',
+        buttons: [],
+        focus: 'first'
+                // width: '560px'
+                // height: '400px',
+                // maxheight: '400px'
     },
     config);
 
@@ -1225,10 +1271,10 @@ $d.window = function(config) {
             data-dismiss="{dismiss}">{text}</button>\n';
 
         strFooter += $d.interpolate(strTpl, {
-            'id': strButtonId,
-            'class': strButtonClass,
-            'text': gh(strButtonText),
-            'dismiss': strButtonDismiss
+            id: strButtonId,
+            class: strButtonClass,
+            text: gh(strButtonText),
+            dismiss: strButtonDismiss
         });
 
         if (typeof btn.callback === 'function') {
@@ -1268,14 +1314,14 @@ $d.window = function(config) {
     var strId = $d.createId('d_ui_window_');
 
     strHtml = $d.interpolate(strHtml, {
-        'id': strId,
-        'title': gh(config.title),
-        //'body': config.body,
-        'top': strTop,
-        'width': strWidth,
-        'marginleft': strMarginLeft,
-        'height': strHeight,
-        'maxheight': strMaxHeight
+        id: strId,
+        title: gh(config.title),
+        //body: config.body,
+        top: strTop,
+        width: strWidth,
+        marginleft: strMarginLeft,
+        height: strHeight,
+        maxheight: strMaxHeight
     });
 
     if (!empty(strFooter)) {
@@ -1286,7 +1332,6 @@ $d.window = function(config) {
 
     strHtml += '</div></div>';
     strHtml += '</div>';
-    //$d.log(strHtml);
     var modal = $(strHtml);
 
     // append modal content
@@ -1353,8 +1398,8 @@ $d.window = function(config) {
  * }); 
  * 
  * $d.alert({
- *     'text': 'Test Message',
- *     'title': __('Title')
+ *     text: 'Test Message',
+ *     title: __('Title')
  * }, function() {
  *     alert('Hello world callback');
  * });
@@ -1369,23 +1414,23 @@ $d.alert = function(config, callback) {
     }
 
     config = $.extend({
-        'title': false,
-        'text': strText,
-        'modal': {
-            'backdrop': 'static',
-            'keyboard': false,
-            'show': true
+        title: false,
+        text: strText,
+        modal: {
+            backdrop: 'static',
+            keyboard: false,
+            show: true
         }
     },
     config);
 
     var wnd = $d.window({
-        'title': config.title,
-        'body': gh(config.text),
-        'buttons': [{
-                'text': __('OK'),
-                'class': 'btn btn-primary',
-                'dismiss': 'modal'
+        title: config.title,
+        body: gh(config.text),
+        buttons: [{
+                text: __('OK'),
+                class: 'btn btn-primary',
+                dismiss: 'modal'
             }]
     });
 
@@ -1429,42 +1474,42 @@ $d.confirm = function(config, callback) {
     var boolCallbackFlag = true;
 
     config = $.extend({
-        'title': false,
-        'text': strText,
-        'buttons': [{
-                'text': __('OK'),
-                'class': 'btn btn-primary',
-                'dismiss': 'modal',
-                'callback': function(e) {
+        title: false,
+        text: strText,
+        buttons: [{
+                text: __('OK'),
+                class: 'btn btn-primary',
+                dismiss: 'modal',
+                callback: function(e) {
                     if (typeof callback === 'function') {
                         boolCallbackFlag = false;
                         callback(true);
                     }
                 }
             }, {
-                'text': __('Cancel'),
-                'class': 'btn',
-                'dismiss': 'modal',
-                'callback': function(e) {
+                text: __('Cancel'),
+                class: 'btn',
+                dismiss: 'modal',
+                callback: function(e) {
                     if (typeof callback === 'function') {
                         boolCallbackFlag = false;
                         callback(false);
                     }
                 }
             }],
-        'primary': 'ok',
-        'modal': {
-            'backdrop': 'static',
-            'keyboard': false,
-            'show': true
+        primary: 'ok',
+        modal: {
+            backdrop: 'static',
+            keyboard: false,
+            show: true
         }
     },
     config);
 
     var wnd = $d.window({
-        'title': config.title,
-        'body': gh(config.text),
-        'buttons': config.buttons
+        title: config.title,
+        body: gh(config.text),
+        buttons: config.buttons
     });
 
     $(wnd).on('hidden.bs.modal', function() {
@@ -1518,16 +1563,16 @@ $d.showFile = function(config, callback) {
     var boolIsChrome = $d.isBrowser('chrome');
 
     config = $.extend({
-        'url': '',
-        'key': null,
+        url: '',
+        key: null,
         // pdf viewer: external, internal
-        'pdfviewer': 'external',
-        'pdfpage': 0,
-        'popup': false,
-        'modal': {
-            'backdrop': 'static',
-            'keyboard': false,
-            'show': true
+        pdfviewer: 'external',
+        pdfpage: 0,
+        popup: false,
+        modal: {
+            backdrop: 'static',
+            keyboard: false,
+            show: true
         }
     },
     config);
@@ -1576,8 +1621,8 @@ $d.showFile = function(config, callback) {
         strHtml = '<object id="iframe_print" style="position:absolute;z-index:-1;width:98%; height:99%;" classid="clsid:CA8A9780-280D-11CF-A24D-444553540000"><param name="src" value="{url}" /></object>';
     }
 
-    strHtml = $d.interpolate()(strHtml, {
-        'url': strUrl
+    strHtml = $d.interpolate(strHtml, {
+        url: strUrl
     });
 
     var arrButtons = [];
@@ -1586,9 +1631,9 @@ $d.showFile = function(config, callback) {
     // FF users should use the pdf.js integrated print button
     if ($d.getFirefoxVersion() === -1) {
         arrButtons.push({
-            'text': __('Drucken'),
-            'class': 'btn btn-primary',
-            'callback': function(event) {
+            text: __('Print'),
+            class: 'btn btn-primary',
+            callback: function(event) {
                 var iframe = document.getElementById('iframe_print');
                 if ($d.getIeVersion() >= 9) {
                     iframe.focus();
@@ -1602,19 +1647,19 @@ $d.showFile = function(config, callback) {
     }
 
     arrButtons.push({
-        'text': __('Abbrechen'),
-        'event': 'cancel',
-        'dismiss': 'modal'
+        text: __('Cancel'),
+        event: 'cancel',
+        dismiss: 'modal'
     });
 
     var wnd = $d.window({
-        'title': config.title || __('Drucken'),
-        'body': strHtml,
-        'width': '92%',
-        'height': '100%',
-        'maxheight': '100%',
-        'top': '0%',
-        'buttons': arrButtons
+        title: config.title || __('Print'),
+        body: strHtml,
+        width: '92%',
+        height: '100%',
+        maxheight: '100%',
+        top: '0%',
+        buttons: arrButtons
     });
 
     if (typeof callback === 'function') {
@@ -1722,6 +1767,7 @@ $d.serializeObject = function(arr) {
 
 /**
  * Get el from field name (data[name]) in objForm
+ * 
  * @param objForm jquery Form element (or text selector)
  * @param strFieldName name of field to look for
  * @returns objEl jquery element object
@@ -1729,7 +1775,7 @@ $d.serializeObject = function(arr) {
 $d.getField = function(objForm, strFieldName) {
     var sel = "input[name=data\\[{s}\\]],select[name=data\\[{s}\\]],textarea[name=data\\[{s}\\]]";
     var strFieldEl = $d.interpolate(sel, {
-        's': strFieldName
+        s: strFieldName
     });
     return $(objForm).find(strFieldEl);
 };
@@ -1743,6 +1789,7 @@ $d.getFieldName = function(el) {
 
 /**
  * Fill form with values
+ * 
  * @param {Object} options
  * options.name - Select elements by name with name[key]. default = field
  * options.data - Form values (key, value)
@@ -1816,6 +1863,12 @@ $d.loadForm = function(options) {
     return $(options.form);
 };
 
+/**
+ * Load table
+ * 
+ * @param {object} options
+ * @returns {object}
+ */
 $d.loadTable = function(options) {
 
     // overwrite default settings 
@@ -1826,7 +1879,6 @@ $d.loadTable = function(options) {
     },
     options);
 
-    //debugger;
     var el = $(options.control);
     if (!el.length) {
         return;
@@ -1840,10 +1892,7 @@ $d.loadTable = function(options) {
     }
 
     var strTableId = $(el).attr('id');
-
-    //debugger;
     var strNewRow = $d.decodeBase64($("#" + strTableId).attr('data-newrow'));
-    //console.log(strNewRow);
     var numRow = parseInt($(el).find('tr:last').attr('data-row'), 10) + 1;
     if (isNaN(numRow)) {
         numRow = 0;
@@ -1881,7 +1930,8 @@ $d.loadTable = function(options) {
 };
 
 /**
- * fill drop-down
+ * Fill drop-down
+ * 
  * @param {object} dropdown
  * @returns {unresolved}
  */
@@ -1889,14 +1939,14 @@ $d.loadDropdown = function(dropdown) {
 
     // overwrite default settings 
     dropdown = $.extend({
-        'control': null,
-        'options': null,
-        'value': 'id',
-        'text': 'text',
-        'blank': false,
-        'selected_value': null,
+        control: null,
+        options: null,
+        value: 'id',
+        text: 'text',
+        blank: false,
+        selected_value: null,
         // Can be array (multiple select)
-        'selected_text': null // Same
+        selected_text: null // Same
     },
     dropdown);
 
@@ -1947,9 +1997,9 @@ $d.loadDropdown = function(dropdown) {
         }
 
         var strHtml = $d.interpolate(strTpl, {
-            'value': gh(strValue),
-            'text': gh(strText),
-            'selected': boolSelected ? "selected='selected'" : ""
+            value: gh(strValue),
+            text: gh(strText),
+            selected: boolSelected ? "selected='selected'" : ""
         });
 
         $(el).append(strHtml);
@@ -2014,7 +2064,7 @@ $d.resetValidation = function(element) {
 };
 
 /**
- * set validation styles for errors, warning and success
+ * Set validation styles for errors, warning and success
  * 
  * @param {object} selector
  * @param {string} style success, warning, error
@@ -2164,6 +2214,7 @@ $d.setCookie = function(key, value, options) {
 
 /**
  * Get cookie value
+ * 
  * @param {string} key
  * @param {*} defaultValue
  * @param {object} options
@@ -2191,6 +2242,7 @@ $d.getCookie = function(key, defaultValue, options) {
 
 /**
  * Delete cookie
+ * 
  * @param {string} key
  */
 $d.deleteCookie = function(key) {
@@ -2202,11 +2254,10 @@ $d.deleteCookie = function(key) {
 //------------------------------------------------------------------------------
 // Single Page Web App
 //------------------------------------------------------------------------------
-//
-//$d.page = {};
-//$d.page.fn = {};
+
 /**
  * Change page
+ * 
  * @param {String} selector
  * @param {String} strPage page id
  * @param {Object} pageParams page parameter (optional)
@@ -2266,6 +2317,7 @@ $d.setPage = function(selector, strPage, pageParams) {
 
 /**
  * Set content into element (selector) and remove old dynamic elements
+ * 
  * @param {string} selector
  * @param {object} content
  * @param {object} params
@@ -2302,6 +2354,7 @@ $d.setPageContent = function(selector, content, params, boolClear) {
 
 /**
  * Event handler for page controller
+ * 
  * @param {string} selector
  * @param {string} strEvent
  * @param {function} callback
@@ -2317,6 +2370,7 @@ $d.onPage = function(selector, strEvent, callback) {
 
 /**
  * Script and CSS loader
+ * 
  * @param {array} array
  * @param {callback} callback
  */
@@ -2406,7 +2460,6 @@ $d.notify = function(options) {
     }, options);
     return notif(options);
 };
-
 
 /**
  * Fix for open modal is shifting body content to the left #9855
