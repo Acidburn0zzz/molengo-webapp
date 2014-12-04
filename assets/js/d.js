@@ -633,24 +633,6 @@ $d.decodeJson = function(str) {
 };
 
 /**
- *  key-value array to url parameter string
- * @param {Array} a
- * @returns {string}
- */
-$d.arrayToUri = function(a) {
-    if (!isset(a)) {
-        return '';
-    }
-    var pairs = [];
-    for (var key in a) {
-        if (a.hasOwnProperty(key)) {
-            pairs.push(encodeURI(key) + '=' + encodeURI(a[key]));
-        }
-    }
-    return pairs.join('&');
-};
-
-/**
  * Interpolates context values into the message placeholders.
  * @param {string} str
  * @param {object} replacePairs
