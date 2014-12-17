@@ -59,8 +59,18 @@ $d.Upload = function() {
             onimageload: $this.onImageLoad,
             maxfilesize: 3 * 1024 * 1024,
             global: false,
-            filetype: fileTypes
+            filetype: fileTypes,
+            'plugin': {
+                filereader: 'assets/js/filereader.swf',
+                extensions: "*.jpg;*.gif;*.png"
+            }
         }, options);
+
+        // check for fileReader polyfill (plugin)
+        // https://github.com/Jahdrien/FileReader
+        if ($.fn.fileReader) {
+            $(options.input).fileReader(options.plugin);
+        }
 
         // Handle drag and drop events
         options.image.on('dragenter', function(e) {
