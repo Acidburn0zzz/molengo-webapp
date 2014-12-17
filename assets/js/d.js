@@ -652,7 +652,7 @@ $d.encodeJson = function(obj) {
  */
 $d.decodeJson = function(str) {
     try {
-        var obj = JSON.parse(str);
+        var obj = $.parseJSON(str);
         return obj;
     } catch (e) {
         $d.log(e);
@@ -795,7 +795,7 @@ $d.getBaseUrl = function(sPath) {
  */
 $d.urlParams = function() {
     var search = location.search.substring(1);
-    var query = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+    var query = search ? $.parseJSON('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
             function(key, value) {
                 return key === "" ? value : decodeURIComponent(value);
             }) : {};
@@ -1272,7 +1272,7 @@ $d.window = function(config) {
 
         strFooter += $d.interpolate(strTpl, {
             id: strButtonId,
-            class: strButtonClass,
+            'class': strButtonClass,
             text: gh(strButtonText),
             dismiss: strButtonDismiss
         });
@@ -1429,7 +1429,7 @@ $d.alert = function(config, callback) {
         body: gh(config.text),
         buttons: [{
                 text: __('OK'),
-                class: 'btn btn-primary',
+                'class': 'btn btn-primary',
                 dismiss: 'modal'
             }]
     });
@@ -1478,7 +1478,7 @@ $d.confirm = function(config, callback) {
         text: strText,
         buttons: [{
                 text: __('OK'),
-                class: 'btn btn-primary',
+                'class': 'btn btn-primary',
                 dismiss: 'modal',
                 callback: function(e) {
                     if (typeof callback === 'function') {
@@ -1488,7 +1488,7 @@ $d.confirm = function(config, callback) {
                 }
             }, {
                 text: __('Cancel'),
-                class: 'btn',
+                'class': 'btn',
                 dismiss: 'modal',
                 callback: function(e) {
                     if (typeof callback === 'function') {
@@ -1632,7 +1632,7 @@ $d.showFile = function(config, callback) {
     if ($d.getFirefoxVersion() === -1) {
         arrButtons.push({
             text: __('Print'),
-            class: 'btn btn-primary',
+            'class': 'btn btn-primary',
             callback: function(event) {
                 var iframe = document.getElementById('iframe_print');
                 if ($d.getIeVersion() >= 9) {
@@ -1783,7 +1783,7 @@ $d.getField = function(objForm, strFieldName) {
 $d.getFieldName = function(el) {
     var strName = $(el).attr('name');
     var strFieldName = '';
-    strFieldName = strName.replace(/^(field\[)(.*)(\])$/g, '$2');
+    strFieldName = strName.replace(/^(data\[)(.*)(\])$/g, '$2');
     return strFieldName;
 };
 
