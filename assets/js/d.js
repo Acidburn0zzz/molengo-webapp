@@ -22,8 +22,6 @@
  * THE SOFTWARE.
  */
 
-// Version: 14.12.04.0
-
 /**
  * Checks if the variable is empty
  * @param {mixed} v
@@ -2459,11 +2457,4 @@ $d.notify = function(options) {
         zindex: 9999999
     }, options);
     return notif(options);
-};
-
-/**
- * Fix for open modal is shifting body content to the left #9855
- */
-$.fn.modal.Constructor.prototype.setScrollbar = function() {
-    // nada
 };
