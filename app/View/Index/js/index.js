@@ -19,14 +19,14 @@ app.page.Index = function Index(options) {
     // load content
     this.load = function() {
         $d.showLoad();
-        $d.rpc('index.load', function(data) {
+        $d.rpc('index.load', function(res) {
 
-            if (!$d.handleResponse(data)) {
+            if (!$d.handleResponse(res)) {
                 return;
             }
 
             // load table rows
-            if (data.result.status === 1) {
+            if (res.result.status === 1) {
                 $d.notify({
                     msg: "<b>Ok</b> Loaded successfully!",
                     type: "success",
