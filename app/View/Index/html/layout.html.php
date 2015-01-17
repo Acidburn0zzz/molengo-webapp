@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title><?php wh(__('Demo')); ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <base href="<?php echo App::getRequest()->getBaseUrl('/'); ?>" />
+        <base href="<?php echo $controller->request->getBaseUrl('/'); ?>" />
         <link rel="shortcut icon" href="assets/ico/favicon.ico">
         <link type="text/css" href="assets/css/bootstrap.min.css" rel="stylesheet" />
         <?php echo $this->block('css'); ?>
@@ -18,7 +18,7 @@
         <div class="container">
             <div class="header">
                 <ul class="nav nav-pills pull-right">
-                    <?php if (App::getUser()->is('ROLE_ADMIN')) : ?>
+                    <?php if ($controller->user->is('ROLE_ADMIN')) : ?>
                         <li class="active"><a href="#"><?php wh(__('Admin')); ?></a></li>
                     <?php endif ?>
                     <li class="active"><a href="login"><?php wh(__('Logout')); ?></a></li>

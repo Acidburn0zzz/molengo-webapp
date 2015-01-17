@@ -2,16 +2,56 @@
 
 namespace Controller;
 
-use App;
-
 class LoginController extends AppController
 {
 
-    public function __construct()
+    // no auth check for login controller
+    protected $boolAuth = false;
+
+    /**
+     * Action: index
+     *
+     * @return void
+     */
+    public function index()
     {
-        // no auth check for login controller
+        if ($this->request->is('post')) {
+
+            $arrLogin = array();
+            $arrLogin['username'] = $this->request->param('username', 'p');
+            $arrLogin['password'] = $this->request->param('password', 'p');
+
+            $boolReturn = $this->user->login($arrLogin);
+            if ($boolReturn) {
+                $this->response->redirectBase('/');
+            } else {
+                $this->response->redirectBase('login');
+            }
+            exit;
+        } else {
+            //$this->user->logout();
+            $this->view->addFile('Index/css/login.css');
+            $this->view->render('Index/html/login.html.php');
+        }
     }
 
+    /**
+     * Action: logout
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        $this->user->logout();
+        $this->response->redirectBase('/');
+        exit;
+    }
+
+    /**
+     * Returns assets
+     *
+     * @return array
+     */
     protected function indexAssets()
     {
         $arrFiles = parent::assets();
@@ -19,37 +59,4 @@ class LoginController extends AppController
         return $arrFiles;
     }
 
-    public function index()
-    {
-        $req = $this->request();
-        $res = $this->response();
-        $user = App::getUser();
-
-        if ($req->is('post')) {
-
-            $arrLogin = array();
-            $arrLogin['username'] = $req->param('username', 'p');
-            $arrLogin['password'] = $req->param('password', 'p');
-
-            $boolReturn = $user->login($arrLogin);
-            if ($boolReturn) {
-                $res->redirectBase('/');
-            } else {
-                $res->redirectBase('login');
-            }
-            exit;
-        } else {
-            $user->logout();
-            $tpl = $this->template();
-            $tpl->addFile('Index/css/login.css');
-            $tpl->render('Index/html/login.html.php');
-        }
-    }
-
-    public function logout()
-    {
-        App::getUser()->logout();
-        App::getResponse()->redirectBase('/');
-        exit;
-    }
 }

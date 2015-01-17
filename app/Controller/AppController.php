@@ -2,8 +2,6 @@
 
 namespace Controller;
 
-use App;
-
 class AppController extends \Molengo\Controller\BaseController
 {
 
@@ -12,11 +10,12 @@ class AppController extends \Molengo\Controller\BaseController
      */
     public function __construct()
     {
-        // check if user logged in
-        if (!App::getUser()->isAuth()) {
-            $this->response()->redirectBase('login');
-        }
         parent::__construct();
+
+        // check if user logged in
+        if ($this->boolAuth == true && !$this->user->isAuth()) {
+            $this->response->redirectBase('login');
+        }
     }
 
     /**
@@ -53,12 +52,13 @@ class AppController extends \Molengo\Controller\BaseController
         //$strName = get_class($this) . '::' . $strMethod;
         //
         //check authentication
-        $boolReturn = App::getUser()->isAuth();
+        $boolReturn = $this->user->isAuth();
         if (!$boolReturn) {
-            $this->response()->setHeader('HTTP/1.1 401 Unauthorized', true, 401);
+            $this->response->setHeader('HTTP/1.1 401 Unauthorized', true, 401);
             echo 'Unauthorized access';
             exit;
         }
         return $boolReturn;
     }
+
 }

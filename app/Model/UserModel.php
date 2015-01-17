@@ -2,9 +2,7 @@
 
 namespace Model;
 
-use App;
-
-class UserModel extends \Molengo\Model\BaseModel
+class UserModel extends AppModel
 {
 
     use \Molengo\Model\UserModel;

@@ -2,8 +2,6 @@
 
 namespace Model\Index;
 
-use App;
-
 class IndexModel extends \Model\AppModel
 {
 
@@ -38,4 +36,5 @@ class IndexModel extends \Model\AppModel
 
         return $arrReturn;
     }
+
 }

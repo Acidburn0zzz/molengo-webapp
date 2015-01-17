@@ -2,10 +2,33 @@
 
 namespace Controller;
 
-use App;
-
 class IndexController extends AppController
 {
+
+    /**
+     * Action: index (default)
+     *
+     * @return void
+     */
+    public function index()
+    {
+        $this->view->set('controller', $this);
+        $this->view->addFiles($this->indexAssets());
+        $this->view->addFile('Index/html/index.html.php');
+        $this->view->render('Index/html/layout.html.php');
+    }
+
+    /**
+     * Action: load
+     *
+     * @return array
+     */
+    public function load()
+    {
+        $arrReturn = array();
+        $arrReturn['status'] = 1;
+        return $arrReturn;
+    }
 
     /**
      * Returns action assets
@@ -35,22 +58,4 @@ class IndexController extends AppController
         return $arrFiles;
     }
 
-    /**
-     * Action: index (default)
-     * @return void
-     */
-    public function index()
-    {
-        $tpl = $this->template();
-        $tpl->addFiles($this->indexAssets());
-        $tpl->addFile('Index/html/index.html.php');
-        $tpl->render('Index/html/layout.html.php');
-    }
-
-    public function load()
-    {
-        $arrReturn = array();
-        $arrReturn['status'] = 1;
-        return $arrReturn;
-    }
 }

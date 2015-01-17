@@ -8,7 +8,7 @@ class App extends \Molengo\WebApp
      *
      * @return void
      */
-    public static function init()
+    public static function config()
     {
         // timezone
         date_default_timezone_set('Europe/Berlin');
@@ -66,8 +66,6 @@ class App extends \Molengo\WebApp
 
         // app secret
         self::set('app.secret', '54530e855d68c1d021b74327d1e6bd991443698d');
-
-        // init all objects
-        self::initAll();
     }
+
 }
