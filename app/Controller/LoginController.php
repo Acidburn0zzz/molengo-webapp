@@ -29,7 +29,7 @@ class LoginController extends AppController
             }
             exit;
         } else {
-            //$this->user->logout();
+            $this->user->logout();
             $this->view->addFile('Index/css/login.css');
             $this->view->render('Index/html/login.html.php');
         }
