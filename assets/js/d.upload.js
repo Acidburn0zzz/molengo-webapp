@@ -29,6 +29,44 @@ if (!$d) {
 $d.Upload = function() {
 
     var $this = this;
+    
+    /**
+     * File upload
+     * 
+     * @param {object} options
+     * @returns {undefined}
+     */
+    this.uploadFile = function(options) {
+
+        // allowed filetypes
+        var fileTypes = {};
+
+        options = $.extend({
+            onupload: $this.onFileUpload,
+            onfileload: options.onfileload || function() {
+            },
+            maxfilesize: 3 * 1024 * 1024,
+            global: false,
+            filetype: fileTypes,
+            'plugin': {
+                filereader: 'assets/js/filereader.swf',
+                extensions: "*.*"
+            }
+        }, options);
+
+        // check for fileReader polyfill (plugin)
+        // https://github.com/Jahdrien/FileReader
+        if ($.fn.fileReader) {
+            $(options.input).fileReader(options.plugin);
+        }
+
+        options.input.on('change', function(e) {
+            var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+            options.onupload(files, options);
+            // reset
+            $(options.input).val('');
+        });
+    };
 
     /**
      * Image uploader
@@ -172,7 +210,7 @@ $d.Upload = function() {
         };
 
         reader.onload = function(e) {
-            options.onimageload(e, options);
+            options.onimageload(e, file, options);
         };
         reader.readAsDataURL(file);
 
@@ -182,12 +220,52 @@ $d.Upload = function() {
      * If image is loaded
      *
      * @param {object} e
+     * @param {object} file
      * @returns {undefined}
      */
-    this.onImageLoad = function(e, options) {
+    this.onImageLoad = function(e, file, options) {
         var strData = e.target.result;
         // change image
         $(options.image).attr('src', strData);
+    };
+
+    /**
+     * Event onFileUpload
+     *
+     * @param {object} files
+     * @param {object} obj
+     * @returns {undefined}
+     */
+    this.onFileUpload = function(files, options) {
+
+        if (!files || files.length < 1) {
+            return;
+        }
+
+        var reader = new FileReader();
+        var file = files[0];
+
+        //var strFileName = file.name;
+        var strFileType = file.type;
+        if (!(strFileType in options.filetype)) {
+            $d.alert(__('The filetype is invalid'));
+            return;
+        }
+
+        if (file.size > options.maxfilesize) {
+            $d.alert(__('The file size exceeds the limit allowed'));
+            return;
+        }
+
+        reader.onerror = function(event) {
+            $d.alert(__("The file could not be opened.") + ' ' + event.target.error.code);
+        };
+
+        reader.onload = function(e) {
+            options.onfileload(e, file, options);
+        };
+        reader.readAsDataURL(file);
+
     };
 
 };
