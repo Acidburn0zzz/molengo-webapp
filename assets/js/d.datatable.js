@@ -1,0 +1,407 @@
+
+/**
+ * DataTable jQuery plugin
+ * Serverside pagination, sort and search
+ *
+ * @param {string|object} selector
+ * @param {object} options
+ * @returns {undefined}
+ *
+ * @licence MIT
+ * @author odan
+ */
+$d.fn.DataTable = function(selector, options) {
+
+    var $this = this;
+    this.el = $(selector);
+
+    // default options
+    this.options = $.extend({
+        pageSize: 10,
+        page: 0,
+        search: true,
+        paginate: true,
+        pages: 0,
+        start: 0,
+        end: 0,
+        dataSource: null,
+        autoload: true,
+        selectable: false,
+        columns: {}
+    }, options);
+
+    this.init = function() {
+
+        $(this.el).html(this.getTemplate());
+
+        $(this.el).find("[data-name=pagesize] .dropdown-menu li a").click(function(e) {
+            e.preventDefault();
+            var pageSize = $(this).text();
+            $this.setPageSize(pageSize);
+            $this.loadData();
+            return;
+            var btn = el.closest('.dropdown').find('.dropdown-toggle');
+            var txt = btn.find('[data-value]');
+            txt.text(el.text());
+            var pageSize = el.attr('data-value');
+            $this.options.pageSize = pageSize;
+            $this.loadData();
+        });
+
+        $(this.el).on('click', 'table thead th', function() {
+            var col = $(this);
+            var isSortable = col.attr('data-sortable');
+            if (isSortable != '1') {
+                return;
+            }
+
+            var sortProperty = col.attr('data-property');
+            var sortDirection = col.attr('data-sortdirection');
+            sortDirection = sortDirection || 'desc';
+            sortDirection = (sortDirection === 'desc') ? 'asc' : 'desc';
+            col.attr('data-sortdirection', sortDirection);
+            col.parent().find('[data-name=sortdirection]').remove();
+
+            var s = '<span class="glyphicon glyphicon-chevron-down pull-right" data-name="sortdirection"></span>';
+            if (sortDirection == 'asc') {
+                s = '<span class="glyphicon glyphicon-chevron-up pull-right" data-name="sortdirection"></span>';
+            }
+
+            $this.options.sortDirection = sortDirection;
+            $this.options.sortProperty = sortProperty;
+
+            col.append($(s));
+
+            $this.loadData();
+        });
+
+        $(this.el).find('[data-name=search]').on('keypress', function(e) {
+            if (e.keyCode === 13) {
+                $this.loadData();
+            }
+        });
+        $(this.el).find('[data-name=search_button]').on('click', function(e) {
+            $this.loadData();
+        });
+        $(this.el).find('[data-name=page_prev]').on('click', function(e) {
+            if ($this.options.page > 1) {
+                $this.options.page--;
+                $this.loadData();
+            }
+        });
+        $(this.el).find('[data-name=page_next]').on('click', function(e) {
+            if ($this.options.page < $this.options.pages) {
+                $this.options.page++;
+                $this.loadData();
+            }
+        });
+
+        this.renderHeader();
+
+        if (this.options.autoload === true) {
+            this.loadData();
+        }
+    };
+
+    this.setPageSize = function(size) {
+        $this.options.pageSize = size;
+        var div = $($this.el).find("[data-name=pagesize_span]");
+        div.html(size);
+        div.attr('data-value', size);
+    };
+
+    this.getPageSize = function(size) {
+        var div = $($this.el).find("[data-name=pagesize_span]");
+        var result = div.attr('data-value');
+        return result;
+    };
+
+    this.loadData = function() {
+        var options = {};
+        // data filtering (todo)
+        options.filter = {
+            'text': '',
+            'value': ''
+        };
+        options.search = $(this.el).find('[data-name=search]').val();
+        // Represents the current page of data
+        options.page = $this.options.page;
+        // epresenting number of data items to be displayed
+        options.pageSize = $this.getPageSize(); // $this.options.pageSize;
+        // sort
+        options.sortDirection = $this.options.sortDirection;
+        options.sortProperty = $this.options.sortProperty;
+        // callback
+        if ($this.options.dataSource) {
+            $this.options.dataSource(options, $this.render);
+        }
+    };
+
+    /**
+     * Render table
+     *
+     * @param {object} options
+     * @returns {undefined}
+     */
+    this.render = function(options) {
+
+        if ($this.options.beforeRender) {
+            $this.options.beforeRender();
+        }
+
+        // clear table
+        var table = $($this.el).find('[data-name=table]');
+        table.find('tbody').html('');
+
+        $this.options = $.extend($this.options, options);
+        //$d.log(options);
+        if ($this.options.pageSize) {
+            $this.setPageSize($this.options.pageSize);
+        }
+
+        var strPage = __("Page {page} / {pages}");
+        strPage = $d.template(strPage, options);
+        $($this.el).find('[data-name=page_text]').html(strPage);
+
+        var strPosition = __("{start} - {end} of {count} items");
+        strPosition = $d.template(strPosition, options);
+        $($this.el).find('[data-name=postion]').html(strPosition);
+
+        $this.renderBody(options);
+
+        if ($this.options.afterRender) {
+            $this.options.afterRender();
+        }
+    };
+
+    /**
+     * Render table body
+     *
+     * @param {object} options
+     * @returns {undefined}
+     */
+    this.renderBody = function(options) {
+        var table = $($this.el).find('[data-name=table]');
+        var tbody = table.find('tbody');
+        tbody.html('');
+
+        for (var i in options.items) {
+            var tr = $('<tr></tr>');
+            var row = options.items[i];
+            var selectable = $this.options.selectable;
+            if (selectable === 'multi' || selectable === 'single') {
+                tr.on('click', $this.onRowClick);
+                tr.attr('data-selectable', selectable);
+                tr.css('cursor', 'pointer');
+            }
+
+            if ($this.options.onRenderRow) {
+                var renderRow = {
+                    'item': tr,
+                    'row': row
+                };
+                $this.options.onRenderRow(renderRow);
+            }
+
+            for (var j in $this.options.columns) {
+                var col = $this.options.columns[j];
+                var td = $('<td></td>');
+
+                var isColRendered = false;
+                var render = {};
+
+                if ($this.options.onRenderColumn) {
+                    var render = {
+                        'item': td,
+                        'property': col.property,
+                        'value': row[col.property],
+                        'row': row
+                    };
+                    isColRendered = $this.options.onRenderColumn(render);
+                }
+
+                if (!(col.property in row)) {
+                    tr.append(td);
+                    continue;
+                }
+
+                if (isColRendered === false) {
+                    td.html(gh(render.value));
+                } else {
+                    td.append($(render.value));
+                }
+                tr.append(td);
+            }
+            tbody.append(tr);
+        }
+    };
+
+    this.onRowClick = function(e) {
+        var tr = $(this);
+        var selectable = tr.attr('data-selectable');
+        if (selectable !== 'single' && selectable !== 'multi') {
+            return;
+        }
+
+        var selected = tr.attr('data-selected');
+        if (selectable === 'single' && selected != '1') {
+            // deselect all selected rows
+            tr.parent().find('tr[data-selected=1]').each(function() {
+                var sel = $(this);
+                //selected = '0';
+                sel.attr('data-selected', '0');
+                sel.find('[data-name=selected]').remove();
+            });
+        }
+
+        if (selected == '1') {
+            selected = '0';
+            tr.attr('data-selected', selected);
+            var td = tr.find('td:first');
+            td.find('[data-name=selected]').remove();
+        } else {
+            selected = '1';
+            var ico = '<span data-name="selected" class="glyphicon glyphicon-ok pull-right"></span>';
+            tr.attr('data-selected', selected);
+            var td = tr.find('td:first');
+            td.append(ico);
+        }
+        if ($this.options.onRowSelection) {
+            $this.options.onRowSelection({
+                item: tr,
+                selected: selected
+            });
+        }
+    };
+
+    /**
+     * Render table header
+     *
+     * @returns {undefined}
+     */
+    this.renderHeader = function() {
+        var table = $($this.el).find('[data-name=table]');
+        table.find('thead').html('');
+        var tr = $('<tr>');
+        for (var i in $this.options.columns) {
+            var col = $this.options.columns[i];
+            var strTh = '<th>' + gh(col.label) + '</th>';
+            var th = $(strTh);
+            if ('property' in col) {
+                th.attr('data-property', col.property);
+            }
+            if ('sortable' in col) {
+                th.attr('data-sortable', col.sortable ? '1' : '0');
+                if (col.sortable) {
+                    th.css('cursor', 'pointer');
+                }
+            }
+            if ('width' in col) {
+                th.css('width', col.width);
+            }
+            tr.append(th);
+        }
+        table.find('thead').append(tr);
+    };
+
+    this.getSelectedRows = function() {
+        var table = $($this.el).find('[data-name=table]');
+        var rows = table.find('tbody tr[data-selected=1]');
+        return rows;
+    };
+
+    this.getTemplate = function() {
+        var html = '<div class="row">\
+            <div class="col-sm-5">\
+                <div class="pull-left">\
+                    <div class="input-group">\
+                        <input type="text" data-name="search" class="form-control" placeholder="{placeholderSearch}">\
+                        <span class="input-group-btn">\
+                            <button class="btn btn-default" type="button" data-name="search_button">\
+                                <i class="fa fa-search"></i>\
+                            </button>\
+                        </span>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+        <div class="row">\
+            <p></p>\
+        </div>\
+        <div class="row">\
+            <div class="col-sm-12">\
+                <table class="table table-bordered table-striped table-hover" data-name="table">\
+                    <thead>\
+                         <tr>\
+                            <th>&nbsp;\n\
+					<!--<span class="glyphicon glyphicon-chevron-down pull-right"></span>-->\
+                            </th>\
+                        </tr> \
+                    </thead>\
+                    <tbody>\
+                    </tbody>\
+                </table>\
+            </div>\
+        </div>\
+        <div class="row">\
+            <div class="col-sm-12">\
+                <div class="pull-left">\
+                    <table>\
+                        <tbody>\
+                            <tr>\
+                                <td><span data-name="postion">{itemsstartend}</span></td>\
+                                <td>&nbsp;</td>\
+                                <td>\
+                                    <div class="dropdown" data-name="pagesize">\
+                                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">\
+                                            <span data-name="pagesize_span" data-value="10">10</span>\
+                                            <span class="caret"></span>\
+                                        </button>\
+                                        <ul class="dropdown-menu" style="width: 70px !important;min-width: 70px !important;" role="menu">\
+                                            <li><a role="menuitem" data-value="10" href="#">10</a></li>\
+                                            <li><a role="menuitem" data-value="30" href="#">30</a></li>\
+                                        </ul>\
+                                    </div>\
+                                </td>\
+                                <td>&nbsp;</td>\
+                                <td>{perpage}</td>\
+                            </tr>\
+                        </tbody>\
+                    </table>\
+                </div>\
+                <div class="pull-right">\
+                    <button type="button" class="btn btn-default btn-sm" data-name="page_prev">\
+                        <span class="glyphicon glyphicon-chevron-left"></span>\
+                    </button>\
+                    <label data-name="page_text">Page 0 / 0</label>\
+                    <button type="button" class="btn btn-default btn-sm" data-name="page_next">\
+                        <span class="glyphicon glyphicon-chevron-right"></span>\
+                    </button>\
+                </div>\
+                \
+            </div>\
+        </div>';
+
+        // translate
+        html = $d.template(html, {
+            placeholderSearch: __('Search'),
+            perpage: __('per Page'),
+            itemsstartend: __('{start} - {end} of {count} items', {
+                'start': 0,
+                'end': 0,
+                'count': 0
+            })
+        });
+        return html;
+    };
+
+    this.init();
+
+};
+
+// jquery plugin adapter (jpa)
+$.fn.datatable = function(options) {
+    this.each(function() {
+        $(this).data('datatable', new $d.fn.DataTable(this, options));
+    });
+};
