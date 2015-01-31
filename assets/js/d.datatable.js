@@ -60,6 +60,7 @@ $d.fn.DataTable = function(selector, options) {
 
             var sortProperty = col.attr('data-property');
             var sortDirection = col.attr('data-sortdirection');
+            var sortFlag = col.attr('data-sortflag');
             sortDirection = sortDirection || 'desc';
             sortDirection = (sortDirection === 'desc') ? 'asc' : 'desc';
             col.attr('data-sortdirection', sortDirection);
@@ -72,6 +73,7 @@ $d.fn.DataTable = function(selector, options) {
 
             $this.options.sortDirection = sortDirection;
             $this.options.sortProperty = sortProperty;
+            $this.options.sortFlag = sortFlag;
 
             col.append($(s));
 
@@ -134,6 +136,7 @@ $d.fn.DataTable = function(selector, options) {
         // sort
         options.sortDirection = $this.options.sortDirection;
         options.sortProperty = $this.options.sortProperty;
+        options.sortFlag = $this.options.sortFlag;
         // callback
         if ($this.options.dataSource) {
             $this.options.dataSource(options, $this.render);
@@ -320,6 +323,9 @@ $d.fn.DataTable = function(selector, options) {
                 if (col.sortable) {
                     th.css('cursor', 'pointer');
                 }
+            }
+            if ('sortflag' in col) {
+                th.attr('data-sortflag', col.sortflag);
             }
             if ('width' in col) {
                 th.css('width', col.width);
