@@ -1,6 +1,6 @@
 <?php
 
-namespace Model\Index;
+namespace Model;
 
 class IndexModel extends \Model\AppModel
 {
