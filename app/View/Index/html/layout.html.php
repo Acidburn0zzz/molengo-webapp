@@ -7,14 +7,13 @@
         <base href="<?php echo $controller->request->getBaseUrl('/'); ?>" />
         <link rel="shortcut icon" href="assets/ico/favicon.ico">
         <link type="text/css" href="assets/css/bootstrap.min.css" rel="stylesheet" />
+        <link type="text/css" href="assets/css/font-awesome.min.css" rel="stylesheet">
         <?php echo $this->block('css'); ?>
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
         <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
         <?php echo $this->block('js'); ?>
     </head>
-
     <body>
-
         <div class="container">
             <div class="header">
                 <ul class="nav nav-pills pull-right">
@@ -31,8 +30,6 @@
             <div class="footer">
                 <p>&copy; <?php wh(__('Demo') . ' ' . date('Y')); ?></p>
             </div>
-
         </div>
     </body>
-
 </html>
