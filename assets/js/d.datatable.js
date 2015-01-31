@@ -27,6 +27,9 @@ $d.fn.DataTable = function(selector, options) {
         dataSource: null,
         autoload: true,
         selectable: false,
+        checkbox: true,
+        toggleSelected: true,
+        selectedItemBgcolor: '#337ab7',
         columns: {}
     }, options);
 
@@ -191,6 +194,7 @@ $d.fn.DataTable = function(selector, options) {
             var selectable = $this.options.selectable;
             if (selectable === 'multi' || selectable === 'single') {
                 tr.on('click', $this.onRowClick);
+                tr.on('dblclick', $this.onRowDblClick);
                 tr.attr('data-selectable', selectable);
                 tr.css('cursor', 'pointer');
             }
@@ -204,11 +208,13 @@ $d.fn.DataTable = function(selector, options) {
             }
 
             for (var j in $this.options.columns) {
-                var col = $this.options.columns[j];
                 var td = $('<td></td>');
+                var col = $this.options.columns[j];
 
-                var isColRendered = false;
-                var render = {};
+                if (!(col.property in row)) {
+                    tr.append(td);
+                    continue;
+                }
 
                 if ($this.options.onRenderColumn) {
                     var render = {
@@ -217,22 +223,27 @@ $d.fn.DataTable = function(selector, options) {
                         'value': row[col.property],
                         'row': row
                     };
-                    isColRendered = $this.options.onRenderColumn(render);
-                }
-
-                if (!(col.property in row)) {
-                    tr.append(td);
-                    continue;
-                }
-
-                if (isColRendered === false) {
-                    td.html(gh(render.value));
+                    var isColRendered = $this.options.onRenderColumn(render);
+                    if (isColRendered === false) {
+                        td.html(gh(render.value));
+                    } else {
+                        td.append($(render.value));
+                    }
                 } else {
-                    td.append($(render.value));
+                    td.html(gh(row[col.property]));
                 }
                 tr.append(td);
             }
             tbody.append(tr);
+        }
+    };
+
+    this.onRowDblClick = function(e) {
+        var tr = $(this);
+        if ($this.options.onItemDblClick) {
+            $this.options.onItemDblClick({
+                item: tr
+            });
         }
     };
 
@@ -250,24 +261,38 @@ $d.fn.DataTable = function(selector, options) {
                 var sel = $(this);
                 //selected = '0';
                 sel.attr('data-selected', '0');
-                sel.find('[data-name=selected]').remove();
+                if ($this.options.checkbox == true) {
+                    sel.find('[data-name=selected]').remove();
+                } else {
+                    sel.css('background-color', '');
+                }
             });
         }
 
         if (selected == '1') {
-            selected = '0';
-            tr.attr('data-selected', selected);
-            var td = tr.find('td:first');
-            td.find('[data-name=selected]').remove();
+            if ($this.options.toggleSelected == true) {
+                selected = '0';
+                tr.attr('data-selected', selected);
+                if ($this.options.checkbox == true) {
+                    var td = tr.find('td:first');
+                    td.find('[data-name=selected]').remove();
+                } else {
+                    tr.css('background-color', '');
+                }
+            }
         } else {
             selected = '1';
-            var ico = '<span data-name="selected" class="glyphicon glyphicon-ok pull-right"></span>';
             tr.attr('data-selected', selected);
-            var td = tr.find('td:first');
-            td.append(ico);
+            if ($this.options.checkbox == true) {
+                var ico = '<span data-name="selected" class="glyphicon glyphicon-ok pull-right"></span>';
+                var td = tr.find('td:first');
+                td.append(ico);
+            } else {
+                tr.css('background-color', $this.options.selectedItemBgcolor);
+            }
         }
-        if ($this.options.onRowSelection) {
-            $this.options.onRowSelection({
+        if ($this.options.onItemSelection) {
+            $this.options.onItemSelection({
                 item: tr,
                 selected: selected
             });
@@ -304,7 +329,7 @@ $d.fn.DataTable = function(selector, options) {
         table.find('thead').append(tr);
     };
 
-    this.getSelectedRows = function() {
+    this.getSelectedItems = function() {
         var table = $($this.el).find('[data-name=table]');
         var rows = table.find('tbody tr[data-selected=1]');
         return rows;
