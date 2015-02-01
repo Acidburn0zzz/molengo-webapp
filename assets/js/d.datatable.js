@@ -30,6 +30,16 @@ $d.fn.DataTable = function(selector, options) {
         checkbox: true,
         toggleSelected: true,
         selectedItemBgcolor: '#337ab7',
+        // row data-* attributes
+        itemDataAttr: [
+            {
+                'attr': 'id',
+                'property': 'id'
+            }, {
+                'attr': 'token',
+                'property': 'token'
+            }
+        ],
         columns: {}
     }, options);
 
@@ -202,6 +212,18 @@ $d.fn.DataTable = function(selector, options) {
                 tr.css('cursor', 'pointer');
             }
 
+            // append row data attributes
+            if ($this.options.itemDataAttr) {
+                for (var i in $this.options.itemDataAttr) {
+                    var field = $this.options.itemDataAttr[i];
+                    if (field['property'] in row) {
+                        var attr = field['attr'];
+                        var val = row[field['property']];
+                        tr.attr('data-' + attr, val);
+                    }
+                }
+            }
+
             if ($this.options.onRenderRow) {
                 var renderRow = {
                     'item': tr,
@@ -227,10 +249,10 @@ $d.fn.DataTable = function(selector, options) {
                         'row': row
                     };
                     var isColRendered = $this.options.onRenderColumn(render);
-                    if (isColRendered === false) {
-                        td.html(gh(render.value));
-                    } else {
+                    if (isColRendered === true) {
                         td.append($(render.value));
+                    } else {
+                        td.html(gh(render.value));
                     }
                 } else {
                     td.html(gh(row[col.property]));
