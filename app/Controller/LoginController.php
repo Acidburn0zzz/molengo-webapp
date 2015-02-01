@@ -47,16 +47,4 @@ class LoginController extends AppController
         exit;
     }
 
-    /**
-     * Returns assets
-     *
-     * @return array
-     */
-    protected function indexAssets()
-    {
-        $arrFiles = parent::assets();
-        //$arrFiles['js'][] = 'Index/js/login.js';
-        return $arrFiles;
-    }
-
 }
