@@ -16,6 +16,8 @@ class AppController extends \Molengo\Controller\BaseController
         if ($this->boolAuth == true && !$this->user->isAuth()) {
             $this->response->redirectBase('login');
         }
+
+        $this->initLayout();
     }
 
     /**
@@ -23,10 +25,10 @@ class AppController extends \Molengo\Controller\BaseController
      *
      * @return string
      */
-    protected function assets()
+    protected function getAssets()
     {
         // global assets
-        $arrFiles = parent::assets();
+        $arrFiles = parent::getAssets();
         $arrFiles[] = G_ASSET_DIR . '/css/d.css';
         // customized notifIt with bootstrap colors
         $arrFiles[] = G_ASSET_DIR . '/css/notifIt-app.css';
@@ -36,6 +38,16 @@ class AppController extends \Molengo\Controller\BaseController
         $arrFiles[] = G_ASSET_DIR . '/js/notifIt.js';
         $arrFiles[] = 'Index/js/app.js';
         return $arrFiles;
+    }
+
+    /**
+     * Init global layout
+     *
+     * @return void
+     */
+    protected function initLayout()
+    {
+        $this->setTextAssets();
     }
 
     /**
@@ -59,6 +71,21 @@ class AppController extends \Molengo\Controller\BaseController
             exit;
         }
         return $boolReturn;
+    }
+
+    /**
+     * Returns translated text
+     *
+     * @return array
+     */
+    protected function getTextAssets()
+    {
+        $arrReturn = array();
+        $arrReturn['Ok'] = __('Ok');
+        $arrReturn['Cancel'] = __('Cancel');
+        $arrReturn['Yes'] = __('Yes');
+        $arrReturn['No'] = __('No');
+        return $arrReturn;
     }
 
 }

@@ -13,8 +13,11 @@ class IndexController extends AppController
     public function index()
     {
         $this->view->set('controller', $this);
-        $this->view->addFiles($this->indexAssets());
-        $this->view->addFile('Index/html/index.html.php');
+        $arrFiles = parent::getAssets();
+		$arrFiles[] = 'Index/css/index.css';
+        $arrFiles[] = 'Index/js/index.js';
+        $arrFiles[] = 'Index/html/index.html.php';
+        $this->view->addFiles($arrFiles);
         $this->view->render('Index/html/layout.html.php');
     }
 
@@ -28,20 +31,6 @@ class IndexController extends AppController
         $arrReturn = array();
         $arrReturn['status'] = 1;
         return $arrReturn;
-    }
-
-    /**
-     * Returns action assets
-     *
-     * @param array $arrParams
-     * @return array
-     */
-    protected function indexAssets()
-    {
-        $arrFiles = parent::assets();
-        $arrFiles[] = 'Index/css/index.css';
-        $arrFiles[] = 'Index/js/index.js';
-        return $arrFiles;
     }
 
     /**
