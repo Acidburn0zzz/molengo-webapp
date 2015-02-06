@@ -94,7 +94,7 @@ function gv(obj, strKey, mixDefault) {
 
 /**
  * Trim
- * 
+ *
  * @param {String} s
  * @returns {String}
  */
@@ -104,7 +104,7 @@ function trim(s) {
 
 /**
  * Convert object to string (get string)
- * 
+ *
  * @param {object} o
  * @returns {string}
  */
@@ -117,7 +117,7 @@ function gs(o) {
 
 /**
  * Html encoding
- * 
+ *
  * @param {string} str
  * @returns {string} html encoded string
  */
@@ -127,7 +127,7 @@ function gh(str) {
 
 /**
  * Url encoding (get url)
- * 
+ *
  * @param {string} str
  * @returns {string}
  */
@@ -137,7 +137,7 @@ function gu(str) {
 
 /**
  * HTML Attribute Encoding
- * 
+ *
  * @param {string} str string to encode
  * @returns {string}
  */
@@ -147,7 +147,7 @@ function ga(str) {
 
 /**
  * Gettext (translation)
- * 
+ *
  * @param {string} str
  * @param {object} replace
  * @returns {string}
@@ -181,7 +181,7 @@ $d.fn = {};
 
 /**
  * Console logging
- * 
+ *
  * @param {string} msg
  * @returns {void}
  */
@@ -197,7 +197,7 @@ $d.log = function(msg) {
 
 /**
  * JSON-RPC 2.0 Call
- * 
+ *
  * @param {string} method
  * @param {object} params | fncDone
  * @param {function} fncDone | fncError
@@ -258,7 +258,7 @@ $d.rpc = function(method, params, fncDone, fncError) {
 
 /**
  * Check response object for error and show error message
- * 
+ *
  * @param {object} response
  * @returns {boolean}
  */
@@ -292,16 +292,16 @@ $d.handleResponse = function(response) {
 
 /**
  * Copy (clone) a JavaScript object
- * 
+ *
  * Object, Array, Date: a copy is just a reference
  * String, Number, Boolean: a copy is a real copy (don't worry about it changing)
- * 
+ *
  * $.extend doesn't create a "real" copy. Some references still exist.
  * var obj = $.extend({}, sourceobj); // don't use this
- * 
+ *
  * Better use
  * var obj = $d.copy(sourceobj);
- * 
+ *
  * @author A. Levy
  * @link http://stackoverflow.com/questions/728360/most-elegant-way-to-clone-a-javascript-object
  * @param {object} obj
@@ -350,7 +350,7 @@ $d.copyObject = function(obj) {
  * example 1: ord('K'); // returns 1: 75
  * example 2: ord('\uD800\uDC00'); // surrogate pair to create a single Unicode character
  * returns 2: 65536
- * 
+ *
  * @param {string} str
  * @returns {number}
  */
@@ -378,7 +378,7 @@ $d.ord = function(str) {
 
 /**
  * Return a specific character
- * 
+ *
  * @param {string} code
  * @returns {string}
  */
@@ -398,7 +398,7 @@ $d.chr = function(code) {
 
 /**
  * Convert object to integer (default base = 10)
- * 
+ *
  * @param {*} obj
  * @param {number} base
  * @returns {number}
@@ -421,7 +421,7 @@ $d.getInt = function(obj, base) {
 
 /**
  * Check for unsigned integer
- * 
+ *
  * @param {number} num
  * @returns {boolean}
  */
@@ -434,7 +434,7 @@ $d.isInt = function(num) {
 
 /**
  * Check for signed integer
- * 
+ *
  * @param {number} num
  * @returns {boolean}
  */
@@ -451,7 +451,7 @@ $d.isInteger = function(num) {
 /**
  * Check for signed float
  * http://stackoverflow.com/questions/3941052
- * 
+ *
  * @param {number} num
  * @returns {boolean}
  */
@@ -464,7 +464,7 @@ $d.isFloat = function(num) {
 
 /**
  * Validate numbers
- * 
+ *
  * @param {number} num
  * @returns {boolean}
  */
@@ -477,7 +477,7 @@ $d.isNumeric = function(num) {
 
 /**
  * Check for valid date (dd.mm.yyyy)
- * 
+ *
  * @param {string} str
  * @returns {boolean}
  */
@@ -497,7 +497,7 @@ $d.isDate = function(str) {
 
 /**
  * Check for valid email address
- * 
+ *
  * @param {string} email
  * @returns {boolean}
  */
@@ -550,7 +550,7 @@ $d.encodeAttr = function(str) {
 
 /**
  * Url decoding
- * 
+ *
  * @param {string} s
  * @returns {string}
  */
@@ -561,7 +561,7 @@ $d.decodeUrl = function(s) {
 
 /**
  * Escape HTML characters
- * 
+ *
  * @param {string} str
  * @returns {string}
  */
@@ -578,7 +578,7 @@ $d.encodeHtml = function(str) {
 
 /**
  * Remove HTML end return text
- * 
+ *
  * @param {string} s
  * @returns {string}
  */
@@ -591,7 +591,7 @@ $d.removeHtml = function(s) {
 
 /**
  * Return UUID
- * 
+ *
  * @returns {String}
  */
 $d.uuid = function() {
@@ -602,15 +602,105 @@ $d.uuid = function() {
     return str;
 };
 
-// native btoa with native utf-8 encoding
-$d.encodeBase64 = function(s) {
-    s = (s + '').toString();
-    return window.btoa(unescape(encodeURIComponent(s)));
+/**
+ * Base64 encoding
+ *
+ * @param {String} data
+ * @returns {String}
+ */
+$d.encodeBase64 = function(data) {
+    data = (data + '').toString();
+    if (window.btoa) {
+        // native btoa with native utf-8 encoding
+        return window.btoa(unescape(encodeURIComponent(data)));
+    }
+    // fallback
+    var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+            ac = 0,
+            enc = '',
+            tmp_arr = [];
+
+    if (!data) {
+        return data;
+    }
+
+    data = unescape(encodeURIComponent(data));
+
+    do {
+        // pack three octets into four hexets
+        o1 = data.charCodeAt(i++);
+        o2 = data.charCodeAt(i++);
+        o3 = data.charCodeAt(i++);
+
+        bits = o1 << 16 | o2 << 8 | o3;
+
+        h1 = bits >> 18 & 0x3f;
+        h2 = bits >> 12 & 0x3f;
+        h3 = bits >> 6 & 0x3f;
+        h4 = bits & 0x3f;
+
+        // use hexets to index into b64, and append result to encoded string
+        tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+    } while (i < data.length);
+
+    enc = tmp_arr.join('');
+
+    var r = data.length % 3;
+
+    return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
 };
 
-$d.decodeBase64 = function(s) {
-    s = (s + '').toString();
-    return decodeURIComponent(escape(window.atob(s)));
+/**
+ * Base64 decoding
+ *
+ * @param {String} data
+ * @returns {String}
+ */
+$d.decodeBase64 = function(data) {
+    data = (data + '').toString();
+    if (window.atob) {
+        // native
+        return decodeURIComponent(escape(window.atob(data)));
+    }
+    // fallback
+    var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+            ac = 0,
+            dec = '',
+            tmp_arr = [];
+
+    if (!data) {
+        return data;
+    }
+
+    data += '';
+
+    do {
+        // unpack four hexets into three octets using index points in b64
+        h1 = b64.indexOf(data.charAt(i++));
+        h2 = b64.indexOf(data.charAt(i++));
+        h3 = b64.indexOf(data.charAt(i++));
+        h4 = b64.indexOf(data.charAt(i++));
+
+        bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
+
+        o1 = bits >> 16 & 0xff;
+        o2 = bits >> 8 & 0xff;
+        o3 = bits & 0xff;
+
+        if (h3 == 64) {
+            tmp_arr[ac++] = String.fromCharCode(o1);
+        } else if (h4 == 64) {
+            tmp_arr[ac++] = String.fromCharCode(o1, o2);
+        } else {
+            tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
+        }
+    } while (i < data.length);
+
+    dec = tmp_arr.join('');
+
+    return decodeURIComponent(escape(dec.replace(/\0+$/, '')));
 };
 
 $d.encodeUtf8 = function(s) {
@@ -625,7 +715,7 @@ $d.decodeUtf8 = function(s) {
 
 /**
  * Json encoder
- * 
+ *
  * @param {object} obj
  * @returns {string}
  */
@@ -644,7 +734,7 @@ $d.encodeJson = function(obj) {
 
 /**
  * Json decoder
- * 
+ *
  * @param {string} str
  * @returns {object}
  */
@@ -660,7 +750,7 @@ $d.decodeJson = function(str) {
 
 /**
  * Interpolates context values into the message placeholders.
- * 
+ *
  * @param {string} str
  * @param {object} replacePairs
  * @returns {string}
@@ -678,7 +768,7 @@ $d.interpolate = function(str, replacePairs) {
 
 /**
  * Left padding
- * 
+ *
  * @param {string} str
  * @param {number} nLen
  * @param {string} sChar
@@ -695,7 +785,7 @@ $d.padLeft = function(str, nLen, sChar) {
 
 /**
  * The most recent unique ID.
- * 
+ *
  * @type {number}
  */
 $d.cfg.uniqueid = Math.random() * 0x80000000 | 0;
@@ -703,7 +793,7 @@ $d.cfg.uniqueid = Math.random() * 0x80000000 | 0;
 /**
  * Generates and returns a string which is unique in the current document.
  * This is useful, for example, to create unique IDs for DOM elements.
- * 
+ *
  * @param {string} strPrefix optional
  * @return {string} A unique id.
  */
@@ -715,7 +805,7 @@ $d.createId = function(strPrefix) {
 
 /**
  * Escape jQuery selector
- * 
+ *
  * @param {string} str
  * @returns {string}
  */
@@ -729,7 +819,7 @@ $d.jq = function(str) {
 
 /**
  * Redirect browser
- * 
+ *
  * @param {string} strUrl
  * @param {boolean} boolReplace
  * @returns {undefined}
@@ -746,12 +836,12 @@ $d.redirect = function(strUrl, boolReplace) {
 
 
 /**
- * Returns absolute URL from path 
- * 
+ * Returns absolute URL from path
+ *
  * <base href="http://domain.tld/">
  * $d.getBaseUrl('contact');
  * returns http://domain.tld/contact
- * 
+ *
  * @param {String} sPath
  * @returns {String}
  */
@@ -895,7 +985,7 @@ $d.cache.text = {};
 
 /**
  * Set text array
- * 
+ *
  * @param {object} o
  */
 $d.setText = function(o) {
@@ -904,7 +994,7 @@ $d.setText = function(o) {
 
 /**
  * Set text value
- * 
+ *
  * @param {string} strKey
  * @param {string} strValue
  */
@@ -914,7 +1004,7 @@ $d.setTextValue = function(strKey, strValue) {
 
 /**
  * Set text array
- * 
+ *
  * @param {object} o
  */
 $d.addText = function(o) {
@@ -930,7 +1020,7 @@ $d.clearText = function() {
 
 /**
  * Get Text
- * 
+ *
  * @param {string} strMessage
  * @param {object} objReplace
  * @returns {string}
@@ -959,7 +1049,7 @@ $d.getText = function(strMessage, objReplace) {
 
 /**
  * Returns browser language
- * 
+ *
  * @returns {string}
  */
 $d.getLanguage = function() {
@@ -984,7 +1074,7 @@ $d.getLanguage = function() {
 
 /**
  * Returns user agent
- * 
+ *
  * @returns {string} chrome,ie,firefox,safari,opera or '' (another browser)
  */
 $d.getBrowser = function() {
@@ -1020,7 +1110,7 @@ $d.getBrowser = function() {
 
 /**
  * Returns true if browser
- * 
+ *
  * @param {string} browser
  * @returns {boolean}
  */
@@ -1031,7 +1121,7 @@ $d.isBrowser = function(browser) {
 /**
  * Returns the version of Internet Explorer or a -1
  * (indicating the use of another browser).
- * 
+ *
  * @returns {float}
  */
 $d.getIeVersion = function() {
@@ -1096,7 +1186,7 @@ $d.getBrowserVersion = function() {
 
 /**
  * Download Url
- * 
+ *
  * @param {string} strUrl
  */
 $d.downloadUrl = function(strUrl) {
@@ -1107,7 +1197,7 @@ $d.downloadUrl = function(strUrl) {
 
 /**
  * Download File
- * 
+ *
  * @param {string} strKey
  */
 $d.downloadFile = function(strKey) {
@@ -1117,7 +1207,7 @@ $d.downloadFile = function(strKey) {
 
 /**
  * Download and try to open a file
- * 
+ *
  * @param {string} strKey
  */
 $d.openFile = function(strKey) {
@@ -1187,29 +1277,29 @@ $d.template = function(strHtml, data) {
 //------------------------------------------------------------------------------
 /**
  * Show modal window
- * 
+ *
  * @param {Object} config
- * 
+ *
  * window.title - window caption text
  * window.body - html content
- * window.buttons - footer buttons 
- * 
- * @returns {Object} jquery object 
- * 
+ * window.buttons - footer buttons
+ *
+ * @returns {Object} jquery object
+ *
  * show
  * This event fires immediately when the show instance method is called.
- * 
+ *
  * shown
- * This event is fired when the modal has been made visible to the user 
+ * This event is fired when the modal has been made visible to the user
  * (will wait for css transitions to complete).
- * 
+ *
  * hide
  * This event is fired immediately when the hide instance method has been called.
- * 
+ *
  * hidden
- * This event is fired when the modal has finished being hidden 
+ * This event is fired when the modal has finished being hidden
  * from the user (will wait for css transitions to complete).
- * 
+ *
  */
 $d.window = function(config) {
 
@@ -1226,7 +1316,7 @@ $d.window = function(config) {
 
     var strFooter = '';
 
-    // calculate width  
+    // calculate width
     /*
      if (config.width) {
      var strValue = gs(config.width);
@@ -1236,7 +1326,7 @@ $d.window = function(config) {
      }
      }*/
 
-    // calculate height  
+    // calculate height
     if (config.height) {
         var strValue = gs(config.height);
         if (strValue.indexOf('%')) {
@@ -1245,7 +1335,7 @@ $d.window = function(config) {
         }
     }
 
-    // calculate maxheight  
+    // calculate maxheight
     if (config.maxheight) {
         var strValue = gs(config.maxheight);
         if (strValue.indexOf('%')) {
@@ -1384,24 +1474,24 @@ $d.window = function(config) {
 
 /**
  * show message box (bootstrap)
- * 
+ *
  * @param {Object} config
  * @param {function} callback
  * @returns {Object} window
- * 
+ *
  * @example
- * 
+ *
  * $d.alert('Hello World', function() {
  *     alert('ok');
- * }); 
- * 
+ * });
+ *
  * $d.alert({
  *     text: 'Test Message',
  *     title: __('Title')
  * }, function() {
  *     alert('Hello world callback');
  * });
- *    
+ *
  */
 $d.alert = function(config, callback) {
 
@@ -1445,21 +1535,21 @@ $d.alert = function(config, callback) {
 
 /**
  * Confirm
- * 
+ *
  * @param {Object} config
- * 
+ *
  * config.title - Caption Text, default = false (no caption)
  * config.buttons - Button codes 'ok,cancel,apply,retry,ignore,yes,no'
  * config.primary - primary button code
- * 
+ *
  * @param {function} callback
- * 
+ *
  * @example
- * 
+ *
  * $d.confirm('Are you sure?', function(result) {
  *      alert(result); // true or false
  * });
- * 
+ *
  */
 $d.confirm = function(config, callback) {
 
@@ -1534,27 +1624,27 @@ $d.hideLoad = function() {
 
 /**
  * Show print preview window
- * 
+ *
  * @param {object} config
  * @param {function} callback
  * @returns {object} window
- * 
+ *
  * @example
- * 
+ *
  * // open window with url
  * $d.showFile({'url': 'file.pdf'});
- * 
+ *
  * // open window with FileStorage key
  * $d.showFile({'key': data.result.key});
- * 
+ *
  * // with callback onclose (hide)
  * $d.showFile({'key': data.result.key}, function() {
  *     alert('closed');
  * });
- * 
+ *
  * // download file with FileStorage key
  * $d.downloadFile(data.result.key);
- * 
+ *
  */
 $d.showFile = function(config, callback) {
 
@@ -1765,7 +1855,7 @@ $d.serializeObject = function(arr) {
 
 /**
  * Get el from field name (data[name]) in objForm
- * 
+ *
  * @param objForm jquery Form element (or text selector)
  * @param strFieldName name of field to look for
  * @returns objEl jquery element object
@@ -1787,7 +1877,7 @@ $d.getFieldName = function(el) {
 
 /**
  * Fill form with values
- * 
+ *
  * @param {Object} options
  * options.name - Select elements by name with name[key]. default = field
  * options.data - Form values (key, value)
@@ -1796,7 +1886,7 @@ $d.getFieldName = function(el) {
  */
 $d.loadForm = function(options) {
 
-    // overwrite default options 
+    // overwrite default options
     options = $.extend({
         name: 'data',
         data: null,
@@ -1810,7 +1900,7 @@ $d.loadForm = function(options) {
 
     for (var strKey in options.data) {
 
-        // select element by attribute (name) 
+        // select element by attribute (name)
         var field = $(options.form).find('[name="' + options.name + '\\[' + strKey + '\\]"]');
 
         if (!field.length) {
@@ -1863,13 +1953,13 @@ $d.loadForm = function(options) {
 
 /**
  * Load table
- * 
+ *
  * @param {object} options
  * @returns {object}
  */
 $d.loadTable = function(options) {
 
-    // overwrite default settings 
+    // overwrite default settings
     options = $.extend({
         name: 'data',
         control: null,
@@ -1915,7 +2005,7 @@ $d.loadTable = function(options) {
 
     /*
      var boolDifference = $(el).attr('data-difference') === '1';
-     
+
      if(boolDifference) {
      $(el).find(":input").each(function () {
      $(this).on('change', function() {
@@ -1929,13 +2019,13 @@ $d.loadTable = function(options) {
 
 /**
  * Fill drop-down
- * 
+ *
  * @param {object} dropdown
  * @returns {unresolved}
  */
 $d.loadDropdown = function(dropdown) {
 
-    // overwrite default settings 
+    // overwrite default settings
     dropdown = $.extend({
         control: null,
         options: null,
@@ -2063,7 +2153,7 @@ $d.resetValidation = function(element) {
 
 /**
  * Set validation styles for errors, warning and success
- * 
+ *
  * @param {object} selector
  * @param {string} style success, warning, error
  * @param {string} msg message
@@ -2212,7 +2302,7 @@ $d.setCookie = function(key, value, options) {
 
 /**
  * Get cookie value
- * 
+ *
  * @param {string} key
  * @param {*} defaultValue
  * @param {object} options
@@ -2228,7 +2318,7 @@ $d.getCookie = function(key, defaultValue, options) {
 
     var pairs = document.cookie.split('; ');
     for (var i = 0, pair; pair = pairs[i] && pairs[i].split('='); i++) {
-        // IE saves cookies with empty string as "c; ", e.g. without "=" as 
+        // IE saves cookies with empty string as "c; ", e.g. without "=" as
         // opposed to EOMB, thus pair[1] may be undefined
         if (decode(pair[0]) === key) {
             return decode(pair[1] || '');
@@ -2240,7 +2330,7 @@ $d.getCookie = function(key, defaultValue, options) {
 
 /**
  * Delete cookie
- * 
+ *
  * @param {string} key
  */
 $d.deleteCookie = function(key) {
@@ -2255,7 +2345,7 @@ $d.deleteCookie = function(key) {
 
 /**
  * Change page
- * 
+ *
  * @param {String} selector
  * @param {String} strPage page id
  * @param {Object} pageParams page parameter (optional)
@@ -2283,7 +2373,7 @@ $d.setPage = function(selector, strPage, pageParams) {
     $(el).trigger('page.beforechange', eventParams);
 
     // check if possible to change the page
-    // triggers return value (change) 
+    // triggers return value (change)
     if (!eventParams.change) {
         return false;
     }
@@ -2315,7 +2405,7 @@ $d.setPage = function(selector, strPage, pageParams) {
 
 /**
  * Set content into element (selector) and remove old dynamic elements
- * 
+ *
  * @param {string} selector
  * @param {object} content
  * @param {object} params
@@ -2352,7 +2442,7 @@ $d.setPageContent = function(selector, content, params, boolClear) {
 
 /**
  * Event handler for page controller
- * 
+ *
  * @param {string} selector
  * @param {string} strEvent
  * @param {function} callback
@@ -2368,7 +2458,7 @@ $d.onPage = function(selector, strEvent, callback) {
 
 /**
  * Script and CSS loader
- * 
+ *
  * @param {array} array
  * @param {callback} callback
  */
@@ -2386,7 +2476,7 @@ $d.loadElements = function(array, callback) {
             el[prob] = element.prob[prob];
         }
 
-        // callback for external scripts 
+        // callback for external scripts
         var boolExtern = false;
         if ('src' in  element.attr) {
             boolExtern = true;
@@ -2441,7 +2531,7 @@ $d.loadElements = function(array, callback) {
  * @returns {undefined}
  *
  * @link https://github.com/naoxink/notifIt
- * 
+ *
  * <code>
  * $d.notify({
  *    msg: "<b>Ok</b> Saved succesfully!",
