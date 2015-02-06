@@ -132,13 +132,21 @@ $d.fn.DataTable = function(selector, options) {
     };
 
     this.loadData = function() {
+        var viewstate = $this.getViewState();
+        // callback
+        if ($this.options.dataSource) {
+            $this.options.dataSource(viewstate, $this.render);
+        }
+    };
+
+    this.getViewState = function() {
         var options = {};
         // data filtering (todo)
         options.filter = {
             'text': '',
             'value': ''
         };
-        options.search = $(this.el).find('[data-name=search]').val();
+        options.search = $($this.el).find('[data-name=search]').val();
         // Represents the current page of data
         options.page = $this.options.page;
         // epresenting number of data items to be displayed
@@ -147,9 +155,27 @@ $d.fn.DataTable = function(selector, options) {
         options.sortDirection = $this.options.sortDirection;
         options.sortProperty = $this.options.sortProperty;
         options.sortFlag = $this.options.sortFlag;
-        // callback
-        if ($this.options.dataSource) {
-            $this.options.dataSource(options, $this.render);
+        return options;
+    };
+
+    this.setViewState = function(options) {
+        if ('search' in options) {
+            $($this.el).find('[data-name=search]').val(options.search);
+        }
+        if ('page' in options) {
+            $this.options.page = options.page;
+        }
+        if ('pageSize' in options) {
+            $this.setPageSize(options.pageSize);
+        }
+        if ('sortDirection' in options) {
+            $this.options.sortDirection = options.sortDirection;
+        }
+        if ('sortProperty' in options) {
+            $this.options.sortProperty = options.sortProperty;
+        }
+        if ('sortFlag' in options) {
+            $this.options.sortFlag = options.sortFlag;
         }
     };
 
@@ -202,7 +228,7 @@ $d.fn.DataTable = function(selector, options) {
         tbody.html('');
 
         for (var i in options.items) {
-            var tr = $('<tr></tr>');
+            var tr = $('<tr class="d-dt-unselectable"></tr>');
             var row = options.items[i];
             var selectable = $this.options.selectable;
             if (selectable === 'multi' || selectable === 'single') {
@@ -255,7 +281,8 @@ $d.fn.DataTable = function(selector, options) {
                         td.html(gh(render.value));
                     }
                 } else {
-                    td.html(gh(row[col.property]));
+                    td.html('<span unselectable="on">' + gh(row[col.property]) + '</span>');
+                    //td.html(gh(row[col.property]));
                 }
                 tr.append(td);
             }
@@ -364,7 +391,16 @@ $d.fn.DataTable = function(selector, options) {
     };
 
     this.getTemplate = function() {
-        var html = '<div class="row">\
+        var html = '\
+        <style>\
+            .d-dt-unselectable {\
+                -moz-user-select: none;\
+                -khtml-user-select: none;\
+                -webkit-user-select: none;\
+                -o-user-select: none;\
+            }\
+        </style>\
+        <div class="row">\
             <div class="col-sm-5">\
                 <div class="pull-left">\
                     <div class="input-group">\
