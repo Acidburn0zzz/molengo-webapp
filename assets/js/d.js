@@ -1476,6 +1476,10 @@ $d.window = function(config) {
  * show message box (bootstrap)
  *
  * @param {Object} config
+ * config.title - window title
+ * config.text - content as text
+ * config.html - content as html
+ *
  * @param {function} callback
  * @returns {Object} window
  *
@@ -1514,7 +1518,7 @@ $d.alert = function(config, callback) {
 
     var wnd = $d.window({
         title: config.title,
-        body: gh(config.text),
+        body: config.html || gh(config.text),
         buttons: [{
                 text: __('OK'),
                 'class': 'btn btn-primary',
@@ -1538,9 +1542,11 @@ $d.alert = function(config, callback) {
  *
  * @param {Object} config
  *
- * config.title - Caption Text, default = false (no caption)
- * config.buttons - Button codes 'ok,cancel,apply,retry,ignore,yes,no'
- * config.primary - primary button code
+ * config.title - caption text, default = false (no caption)
+ * config.text - content as text
+ * config.html - content as html
+ * config.buttons - button codes 'ok,cancel,apply,retry,ignore,yes,no'
+ * config.primary - primary button code e.g. 'ok'
  *
  * @param {function} callback
  *
@@ -1596,7 +1602,7 @@ $d.confirm = function(config, callback) {
 
     var wnd = $d.window({
         title: config.title,
-        body: gh(config.text),
+        body: config.html || gh(config.text),
         buttons: config.buttons
     });
 
