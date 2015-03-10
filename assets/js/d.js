@@ -2167,7 +2167,7 @@ $d.resetValidation = function(element) {
  * @returns {undefined}
  */
 $d.setValidation = function(selector, style, msg, type) {
-    var obj = $(selector).closest("div[class*='col-']");
+    var obj = $(selector).closest("[class*='col-']");
     if (!obj.length) {
         return;
     }
