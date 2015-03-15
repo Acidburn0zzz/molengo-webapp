@@ -14,7 +14,7 @@ class IndexController extends AppController
     {
         $this->view->set('controller', $this);
         $arrFiles = parent::getAssets();
-		$arrFiles[] = 'Index/css/index.css';
+        $arrFiles[] = 'Index/css/index.css';
         $arrFiles[] = 'Index/js/index.js';
         $arrFiles[] = 'Index/html/index.html.php';
         $this->view->addFiles($arrFiles);
