@@ -6,10 +6,15 @@ Molengo WebApp Skeleton
 
 ## Installation
 
-After you install Composer, run this command from the directory in which you want to install your new web application.
+* Download and extract the latest master.zip from:  
+```
+    wget https://github.com/odan/molengo-webapp/archive/master.zip   `
+    unzip master.zip`   
+```
 
-    composer create-project odan/molengo-webapp ./
+* Run composer install
 
+    composer install
 
 * Ensure `log/`, `tmp/`, `cache/` and are web writeable.
 
