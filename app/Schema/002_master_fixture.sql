@@ -4,10 +4,10 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 /* ---------------------------------------------------------------------------*/
 
-insert into `user` (`id`, `username`, `password`, `enabled`, `role`, `locale`) 
-    values('1','admin','$2y$10$8SCHkI4JUKJ2NA353BTHW.Kgi33HI.2C35xd/j5YUzBx05F1O4lJO','1','ROLE_ADMIN','en_US');
-insert into `user` (`id`, `username`, `password`, `enabled`, `role`, `locale`) 
-    values('2','user','$1$X64.UA0.$kCSxRsj3GKk7Bwy3P6xn1.','1','ROLE_USER','de_DE');
+insert into `user` (`id`, `username`, `password`, `disabled`, `role`, `locale`) 
+    values('1','admin','$2y$10$8SCHkI4JUKJ2NA353BTHW.Kgi33HI.2C35xd/j5YUzBx05F1O4lJO','0','ROLE_ADMIN','en_US');
+insert into `user` (`id`, `username`, `password`, `disabled`, `role`, `locale`) 
+    values('2','user','$1$X64.UA0.$kCSxRsj3GKk7Bwy3P6xn1.','0','ROLE_USER','de_DE');
 
 
 UPDATE `schema_version` SET `version` = '2', `updated_at` = NOW() WHERE `id` = '1'; 
