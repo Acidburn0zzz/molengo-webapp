@@ -12,7 +12,6 @@ class IndexController extends AppController
      */
     public function index()
     {
-        $this->view->set('controller', $this);
         $arrFiles = parent::getAssets();
         $arrFiles[] = 'Index/css/index.css';
         $arrFiles[] = 'Index/js/index.js';
