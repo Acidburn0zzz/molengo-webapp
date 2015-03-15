@@ -1,3 +1,31 @@
 body {
     padding-top: 70px;
+    /* background-color: #e7e7e7; */
+}
+
+/* Flat design */
+* {
+    border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
+
+.btn-panel-heading {
+    border: none;
+    background: none;
+    cursor: default !important;
+    outline: none;
+    border: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+.btn-panel-heading:hover {
+    background: none;
+}
+.btn-panel-heading:focus {
+    background: none;
+    outline: none;
+}
+.btn-panel-heading:active:focus {
+    outline: none;
 }
