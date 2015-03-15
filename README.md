@@ -6,9 +6,9 @@ Molengo WebApp Skeleton
 
 ## Installation
 
-* Download and extract the latest master.zip from:  
+* Download and extract the latest master.zip:  
 ```
-    wget https://github.com/odan/molengo-webapp/archive/master.zip   `
+    wget https://github.com/odan/molengo-webapp/archive/master.zip
     unzip master.zip`   
 ```
 
