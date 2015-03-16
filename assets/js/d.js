@@ -1860,18 +1860,22 @@ $d.serializeObject = function(arr) {
 };
 
 /**
- * Get el from field name (data[name]) in objForm
+ * Get el from field name (data[name] or data[name][sub]) in objForm
  *
  * @param objForm jquery Form element (or text selector)
  * @param strFieldName name of field to look for
  * @returns objEl jquery element object
  */
 $d.getField = function(objForm, strFieldName) {
-    var sel = "input[name=data\\[{s}\\]],select[name=data\\[{s}\\]],textarea[name=data\\[{s}\\]]";
-    var strFieldEl = $d.interpolate(sel, {
-        s: strFieldName
+    var strSel = "input[name=data{s}],select[name=data{s}],textarea[name=data{s}]";
+    if (strFieldName.indexOf('[') === -1) {
+        strFieldName = '[' + strFieldName + ']';
+    }
+    strSel = $d.interpolate(strSel, {
+        s: $d.jq(strFieldName)
     });
-    return $(objForm).find(strFieldEl);
+    var result = $(objForm).find(strSel);
+    return result;
 };
 
 $d.getFieldName = function(el) {
