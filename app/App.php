@@ -8,7 +8,7 @@ class App extends \Molengo\WebApp
      *
      * @return void
      */
-    public static function config()
+    public function config()
     {
         // timezone
         date_default_timezone_set('Europe/Berlin');
@@ -24,48 +24,48 @@ class App extends \Molengo\WebApp
         define('G_VIEW_DIR', realpath(__DIR__ . '/View'));
 
         // set debug modus
-        define('G_DEBUG', self::getRequest()->isLocalhost());
+        define('G_DEBUG', $this->getRequest()->isLocalhost());
 
         if (G_DEBUG) {
             // dev database
-            self::set('db.dsn', 'mysql:host=127.0.0.1;port=3306;dbname=molengo_webapp;username=root;password=');
+            $this->set('db.dsn', 'mysql:host=127.0.0.1;port=3306;dbname=molengo_webapp;username=root;password=');
 
             // smtp
-            self::set('smtp.type', 'smtp');
-            self::set('smtp.host', 'mail.gmx.net');
-            self::set('smtp.port', '465');
-            self::set('smtp.secure', true);
-            self::set('smtp.username', 'mail@gmx.net');
-            self::set('smtp.password', 'password');
-            self::set('smtp.from', 'mail@gmx.net');
-            self::set('smtp.to', 'mail@gmx.net');
+            $this->set('smtp.type', 'smtp');
+            $this->set('smtp.host', 'mail.gmx.net');
+            $this->set('smtp.port', '465');
+            $this->set('smtp.secure', true);
+            $this->set('smtp.username', 'mail@gmx.net');
+            $this->set('smtp.password', 'password');
+            $this->set('smtp.from', 'mail@gmx.net');
+            $this->set('smtp.to', 'mail@gmx.net');
 
             // cache
-            self::set('cache.mode', 0);
-            self::set('cache.min', 0);
+            $this->set('cache.mode', 0);
+            $this->set('cache.min', 0);
         } else {
             // live database
-            self::set('db.dsn', 'mysql:host=127.0.0.1;port=3306;dbname=molengo_webapp;username=root;password=');
+            $this->set('db.dsn', 'mysql:host=127.0.0.1;port=3306;dbname=molengo_webapp;username=root;password=');
 
             // smtp
-            self::set('smtp.type', 'smtp');
-            self::set('smtp.host', '127.0.0.1');
-            self::set('smtp.port', '25');
-            self::set('smtp.username', 'mail@gmx.net');
-            self::set('smtp.password', 'password');
-            self::set('smtp.from', 'mail@gmx.net');
-            self::set('smtp.to', 'mail@gmx.net');
+            $this->set('smtp.type', 'smtp');
+            $this->set('smtp.host', '127.0.0.1');
+            $this->set('smtp.port', '25');
+            $this->set('smtp.username', 'mail@gmx.net');
+            $this->set('smtp.password', 'password');
+            $this->set('smtp.from', 'mail@gmx.net');
+            $this->set('smtp.to', 'mail@gmx.net');
 
             // cache
-            self::set('cache.mode', 1);
-            self::set('cache.min', 1);
+            $this->set('cache.mode', 1);
+            $this->set('cache.min', 1);
         }
 
         // session
-        self::set('session.name', 'webapp');
+        $this->set('session.name', 'webapp');
 
         // app secret
-        self::set('app.secret', '54530e855d68c1d021b74327d1e6bd991443698d');
+        $this->set('app.secret', '54530e855d68c1d021b74327d1e6bd991443698d');
     }
 
 }
