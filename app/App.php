@@ -16,12 +16,13 @@ class App extends \Molengo\WebApp
         // directories
         define('G_APP_DIR', __DIR__);
         define('G_ROOT_DIR', realpath(__DIR__ . '/..'));
-        define('G_LOG_DIR', realpath(__DIR__ . '/../log'));
-        define('G_TMP_DIR', realpath(__DIR__ . '/../tmp'));
-        define('G_CACHE_DIR', realpath(__DIR__ . '/../cache'));
+        define('G_TMP_DIR', realpath(__DIR__ . '/Temp'));
+        define('G_LOG_DIR', realpath(__DIR__ . '/Temp/log'));
+        define('G_CACHE_DIR', realpath(__DIR__ . '/Temp/cache'));
+        define('G_VIEW_DIR', realpath(__DIR__ . '/View'));
+        define('G_VIEW_CACHE_DIR', realpath(__DIR__ . '/../cache'));
         define('G_ASSET_DIR', realpath(__DIR__ . '/../assets'));
         define('G_VENDOR_DIR', realpath(__DIR__ . '/../vendor'));
-        define('G_VIEW_DIR', realpath(__DIR__ . '/View'));
 
         // set debug modus
         define('G_DEBUG', $this->getRequest()->isLocalhost());
