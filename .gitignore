@@ -11,9 +11,15 @@ cache/*
 log/*
 !log/.htaccess
 
-!tmp/
-tmp/*
-!tmp/.htaccess
+app/Temp/*
+
+!app/Temp/log/
+app/Temp/log/*
+!app/Temp/log/empty
+
+!app/Temp/cache/
+app/Temp/cache/*
+!app/Temp/cache/empty
 
 !vendor/
 vendor/*
