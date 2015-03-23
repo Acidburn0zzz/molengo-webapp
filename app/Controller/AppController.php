@@ -47,8 +47,10 @@ class AppController extends \Molengo\Controller\BaseController
      */
     protected function initLayout()
     {
-        // set current controller
-        $this->view->set('controller', $this);
+        // app instance
+        $this->view->set('app', \App::getInstance());
+        // baseurl
+        $this->view->set('baseurl', $this->request->getBaseUrl('/'));
         // set text
         $this->setTextAssets();
     }

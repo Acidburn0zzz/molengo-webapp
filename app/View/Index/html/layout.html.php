@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <base href="<?php echo $controller->request->getBaseUrl('/'); ?>" />
+        <base href="<?php echo $baseurl; ?>" />
         <link rel="shortcut icon" href="assets/ico/favicon.ico">
         <title><?php wh(__('Demo')); ?></title>
         <link type="text/css" href="assets/css/bootstrap.min.css" rel="stylesheet" />
