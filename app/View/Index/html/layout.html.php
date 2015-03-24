@@ -51,7 +51,7 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="#settings"><?php wh(__('Settings')); ?></a></li>
-                        <?php if ($controller->user->is('ROLE_ADMIN')) : ?>
+                        <?php if ($app->getUser()->is('ROLE_ADMIN')) : ?>
                             <li><a href="#admin"><?php wh(__('Admin')); ?></a></li>
                         <?php endif ?>
                         <li><a href="login"><?php wh(__('Logout')); ?></a></li>
