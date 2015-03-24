@@ -5,6 +5,12 @@ namespace Controller;
 class AppController extends \Molengo\Controller\BaseController
 {
 
+    // json-rpc 2.0 support
+    use \Molengo\Controller\JsonRpcController;
+
+    // for single page webapps
+    //use \Molengo\Controller\SinglePageController;
+
     /**
      * Constructor
      */
@@ -56,12 +62,13 @@ class AppController extends \Molengo\Controller\BaseController
     }
 
     /**
-     * Callback: before rpc action is called
+     * Before RPC action is called
      *
-     * @param array $arrParams
+     * @param string $strMethod method
+     * @param array $arrParams params
      * @return boolean
      */
-    protected function beforeCall($arrParams = null)
+    protected function beforeRpcCall($strMethod = null, $arrParams = null)
     {
         $boolReturn = false;
 
