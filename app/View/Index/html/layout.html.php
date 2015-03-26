@@ -59,11 +59,7 @@
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
-        <div class="container">
-            <div id="content">
-                <?php echo $this->block('content'); ?>
-            </div>
-        </div>
+        <?php echo $this->block('content'); ?>
         <!-- JavaScript -->
         <script type="text/javascript" src="assets/js/jquery.min.js"></script>
         <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
