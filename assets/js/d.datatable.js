@@ -71,6 +71,7 @@ $d.fn.DataTable = function(selector, options) {
             var sortProperty = col.attr('data-property');
             var sortDirection = col.attr('data-sortdirection');
             var sortFlag = col.attr('data-sortflag');
+            var sortField = col.attr('data-sortfield');
             sortDirection = sortDirection || 'desc';
             sortDirection = (sortDirection === 'desc') ? 'asc' : 'desc';
             col.attr('data-sortdirection', sortDirection);
@@ -82,8 +83,9 @@ $d.fn.DataTable = function(selector, options) {
             }
 
             $this.options.sortDirection = sortDirection;
-            $this.options.sortProperty = sortProperty;
+            $this.options.sortProperty = empty(sortField) ? sortProperty : sortField;
             $this.options.sortFlag = sortFlag;
+            $this.options.sortField = sortField;
 
             col.append($(s));
 
@@ -155,6 +157,7 @@ $d.fn.DataTable = function(selector, options) {
         options.sortDirection = $this.options.sortDirection;
         options.sortProperty = $this.options.sortProperty;
         options.sortFlag = $this.options.sortFlag;
+        options.sortField = $this.options.sortField;
         return options;
     };
 
@@ -176,6 +179,9 @@ $d.fn.DataTable = function(selector, options) {
         }
         if ('sortFlag' in options) {
             $this.options.sortFlag = options.sortFlag;
+        }
+        if ('sortField' in options) {
+            $this.options.sortField = options.sortField;
         }
     };
 
@@ -375,6 +381,9 @@ $d.fn.DataTable = function(selector, options) {
             }
             if ('sortflag' in col) {
                 th.attr('data-sortflag', col.sortflag);
+            }
+            if ('sortfield' in col) {
+                th.attr('data-sortfield', col.sortfield);
             }
             if ('width' in col) {
                 th.css('width', col.width);
