@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2004-2014 odan
+ * Copyright (c) 2004-2015 odan
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -2171,7 +2171,7 @@ $d.resetValidation = function(element) {
  * @returns {undefined}
  */
 $d.setValidation = function(selector, style, msg, type) {
-    var obj = $(selector).closest("[class*='col-']");
+    var obj = $(selector).closest('div');
     if (!obj.length) {
         return;
     }
