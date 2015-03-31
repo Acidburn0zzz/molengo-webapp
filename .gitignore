@@ -7,10 +7,6 @@ composer.lock
 cache/*
 !cache/.htaccess
 
-!log/
-log/*
-!log/.htaccess
-
 app/Temp/*
 
 !app/Temp/log/
