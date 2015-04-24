@@ -268,16 +268,17 @@ $d.fn.DataTable = function(selector, options) {
                 var td = $('<td></td>');
                 var col = $this.options.columns[j];
 
-                if (!(col.property in row)) {
-                    tr.append(td);
-                    continue;
-                }
+                //if (!(col.property in row)) {
+                //	tr.append(td);
+                //	continue;
+                //}
 
                 if ($this.options.onRenderColumn) {
                     var render = {
                         'item': td,
                         'property': col.property,
                         'value': row[col.property],
+                        'name': col.name,
                         'row': row
                     };
                     var isColRendered = $this.options.onRenderColumn(render);
@@ -422,6 +423,17 @@ $d.fn.DataTable = function(selector, options) {
                     </div>\
                 </div>\
             </div>\
+		<div class="col-sm-7">\
+                    <div class="pull-right">\
+                        <button type="button" class="btn btn-default btn-sm" data-name="page_prev">\
+                            <span class="glyphicon glyphicon-chevron-left"></span>\
+                        </button>\
+                        <label data-name="page_text">Page 0 / 0</label>\
+                        <button type="button" class="btn btn-default btn-sm" data-name="page_next">\
+                            <span class="glyphicon glyphicon-chevron-right"></span>\
+                        </button>\
+                </div>\
+            </div>\
         </div>\
         <div class="row">\
             <p></p>\
@@ -443,7 +455,7 @@ $d.fn.DataTable = function(selector, options) {
         </div>\
         <div class="row">\
             <div class="col-sm-12">\
-                <div class="pull-left">\
+                <div class="pull-right">\
                     <table>\
                         <tbody>\
                             <tr>\
@@ -467,16 +479,6 @@ $d.fn.DataTable = function(selector, options) {
                         </tbody>\
                     </table>\
                 </div>\
-                <div class="pull-right">\
-                    <button type="button" class="btn btn-default btn-sm" data-name="page_prev">\
-                        <span class="glyphicon glyphicon-chevron-left"></span>\
-                    </button>\
-                    <label data-name="page_text">Page 0 / 0</label>\
-                    <button type="button" class="btn btn-default btn-sm" data-name="page_next">\
-                        <span class="glyphicon glyphicon-chevron-right"></span>\
-                    </button>\
-                </div>\
-                \
             </div>\
         </div>';
 
