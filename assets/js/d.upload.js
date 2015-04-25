@@ -29,10 +29,10 @@ if (!$d) {
 $d.Upload = function() {
 
     var $this = this;
-    
+
     /**
      * File upload
-     * 
+     *
      * @param {object} options
      * @returns {undefined}
      */
@@ -189,31 +189,37 @@ $d.Upload = function() {
             return;
         }
 
-        var reader = new FileReader();
-        var file = files[0];
+        var readers = {};
+        for (var i in files)
+        {
+            var file = files[i];
+            if (typeof file !== 'object') {
+                continue;
+            }
+            readers[i] = new FileReader();
+            readers[i].file = file;
 
-        //var strFileName = file.name;
-        var strFileType = file.type;
+            //var strFileName = file.name;
+            var strFileType = file.type;
+            if (!empty(options.filetype) && !(strFileType in options.filetype)) {
+                $d.alert(__('The filetype is invalid'));
+                return;
+            }
 
-        if (!(strFileType in options.filetype)) {
-            $d.alert(__('The filetype is invalid'));
-            return;
+            if (file.size > options.maxfilesize) {
+                $d.alert(__('The file size exceeds the limit allowed'));
+                return;
+            }
+
+            readers[i].onerror = function(event) {
+                $d.alert(__("The file could not be opened.") + ' ' + event.target.error.code);
+            };
+
+            readers[i].onload = function(e) {
+                options.onimageload(e, this.file, options);
+            };
+            readers[i].readAsDataURL(file);
         }
-
-        if (file.size > options.maxfilesize) {
-            $d.alert(__('The file size exceeds the limit allowed'));
-            return;
-        }
-
-        reader.onerror = function(event) {
-            $d.alert(__("The file could not be opened.") + ' ' + event.target.error.code);
-        };
-
-        reader.onload = function(e) {
-            options.onimageload(e, file, options);
-        };
-        reader.readAsDataURL(file);
-
     };
 
     /**
@@ -241,31 +247,37 @@ $d.Upload = function() {
         if (!files || files.length < 1) {
             return;
         }
+        var readers = {};
+        for (var i in files)
+        {
+            var file = files[i];
+            if (typeof file !== 'object') {
+                continue;
+            }
+            readers[i] = new FileReader();
+            readers[i].file = file;
 
-        var reader = new FileReader();
-        var file = files[0];
+            //var strFileName = file.name;
+            var strFileType = file.type;
+            if (!empty(options.filetype) && !(strFileType in options.filetype)) {
+                $d.alert(__('The filetype is invalid'));
+                return;
+            }
 
-        //var strFileName = file.name;
-        var strFileType = file.type;
-        if (!(strFileType in options.filetype)) {
-            $d.alert(__('The filetype is invalid'));
-            return;
+            if (file.size > options.maxfilesize) {
+                $d.alert(__('The file size exceeds the limit allowed'));
+                return;
+            }
+
+            readers[i].onerror = function(event) {
+                $d.alert(__("The file could not be opened.") + ' ' + event.target.error.code);
+            };
+
+            readers[i].onload = function(e) {
+                options.onfileload(e, this.file, options);
+            };
+            readers[i].readAsDataURL(file);
         }
-
-        if (file.size > options.maxfilesize) {
-            $d.alert(__('The file size exceeds the limit allowed'));
-            return;
-        }
-
-        reader.onerror = function(event) {
-            $d.alert(__("The file could not be opened.") + ' ' + event.target.error.code);
-        };
-
-        reader.onload = function(e) {
-            options.onfileload(e, file, options);
-        };
-        reader.readAsDataURL(file);
-
     };
 
 };
