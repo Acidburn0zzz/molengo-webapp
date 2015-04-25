@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2004-2015 odan
+ * Copyright (c) 2004-2014 odan
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -199,12 +199,12 @@ $d.log = function(msg) {
  * JSON-RPC 2.0 Call
  *
  * @param {string} method
- * @param {object} params | fncDone
- * @param {function} fncDone | fncError
- * @param {function} fncError | void
- * @returns {void}
+ * @param {object} params
+ * @param {function} fncDone
+ * @param {object} settings
+ * @returns {object}
  */
-$d.rpc = function(method, params, fncDone, fncError) {
+$d.rpc = function(method, params, fncDone, settings) {
     var parts = method.split('.');
     //var strBaseUrl = $('head base').attr('href');
     //var strUrl = strBaseUrl + parts[0] + '/rpc';
@@ -220,22 +220,14 @@ $d.rpc = function(method, params, fncDone, fncError) {
         id: id,
         method: method
     };
-
-    if (typeof params !== 'undefined' && typeof params !== 'function') {
+    if (typeof params !== 'undefined' && params !== null) {
         request.params = params;
-    }
-
-    if (typeof params === 'function') {
-        if (typeof fncDone === 'function') {
-            fncError = fncDone;
-        }
-        fncDone = params;
     }
 
     var data = $d.encodeJson(request);
 
-    $.ajax({
-        type: "POST",
+    settings = $.extend({
+        type: 'POST',
         url: strUrl,
         data: data,
         processData: false,
@@ -247,13 +239,11 @@ $d.rpc = function(method, params, fncDone, fncError) {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            if (typeof fncError === 'function') {
-                fncError(jqXHR, textStatus, errorThrown);
-            } else {
-                throw Error('Ajax ' + textStatus + ': ' + errorThrown);
-            }
+            throw Error('Ajax ' + textStatus + ': ' + errorThrown);
         }
-    });
+    }, settings);
+
+    return $.ajax(settings);
 };
 
 /**
@@ -2171,7 +2161,7 @@ $d.resetValidation = function(element) {
  * @returns {undefined}
  */
 $d.setValidation = function(selector, style, msg, type) {
-    var obj = $(selector).closest('div');
+    var obj = $(selector).closest("[class*='col-']");
     if (!obj.length) {
         return;
     }
