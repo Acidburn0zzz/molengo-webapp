@@ -206,12 +206,8 @@ $d.log = function(msg) {
  */
 $d.rpc = function(method, params, fncDone, settings) {
     var parts = method.split('.');
-    //var strBaseUrl = $('head base').attr('href');
-    //var strUrl = strBaseUrl + parts[0] + '/rpc';
-    // to underscore and lowercase
-    var ctrl = parts[0].substr(0, 1).toLowerCase();
-    ctrl += parts[0].substr(1).replace(/[A-Z]/g, '-$&').toLowerCase();
-    var strUrl = ctrl + '/rpc';
+    var strBaseUrl = $('head base').attr('href');
+    var strUrl = strBaseUrl + parts[0] + '/rpc';
     var id = 'a' + Math.floor(Math.random() * 9999999) + 1;
     var method = parts[1];
 
