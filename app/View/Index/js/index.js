@@ -1,26 +1,40 @@
+if (!app.index) {
+    app.index = {};
+}
+
 /**
  * Index
- * 
+ *
  * @param {Object} options
  */
-app.page.Index = function Index(options) {
+app.index.Index = function Index(options) {
 
-    // this object
+    // This object
     var $this = this;
 
+    /** @returns {app.index.Index} */
+    var $this = $.extend(this, new app.Page());
+
+    // Options
+    this.options = $.extend({}, options);
+
     /**
-     * init 
+     * Init
+     *
      * @returns {boolean}
      */
     this.init = function() {
         return true;
     };
 
-    // load content
+    /**
+     * Load content
+     *
+     * @returns {undefined}
+     */
     this.load = function() {
         $d.showLoad();
-        $d.rpc('index.load', function(res) {
-
+        $d.rpc('index.load', null, function(res) {
             if (!$d.handleResponse(res)) {
                 return;
             }
@@ -42,6 +56,6 @@ app.page.Index = function Index(options) {
 };
 
 $(function(params) {
-    var obj = new app.page.Index();
-    obj.load(params);
+    var obj = new app.index.Index();
+    obj.load();
 });
