@@ -890,7 +890,7 @@ $d.getBaseUrl = function(sPath) {
  */
 $d.urlParams = function() {
     var search = location.search.substring(1);
-    var query = search ? JSON.parse('{"' + search.replace(/&/g, '","').
+    var query = search ? $.parseJSON('{"' + search.replace(/&/g, '","').
             replace(/=/g, '":"') + '"}') : {};
 
     query = $d.map(query, function(k, v) {
