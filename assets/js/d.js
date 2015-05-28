@@ -196,6 +196,27 @@ $d.log = function(msg) {
 };
 
 /**
+ * Mapp object recursively with callback function
+ *
+ * @param {object} obj
+ * @param {callback} f callback
+ * @returns {object} mapped object
+ */
+$d.map = function(obj, f) {
+    var result = {};
+    for (var k in obj) {
+        if ({}.hasOwnProperty.call(obj, k)) {
+            if (typeof obj[k] === 'object') {
+                result[k] = $d.map(obj[k], f);
+            } else {
+                result[k] = f(k, obj[k]);
+            }
+        }
+    }
+    return result;
+};
+
+/**
  * JSON-RPC 2.0 Call
  *
  * @param {string} method
@@ -869,10 +890,12 @@ $d.getBaseUrl = function(sPath) {
  */
 $d.urlParams = function() {
     var search = location.search.substring(1);
-    var query = search ? $.parseJSON('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-            function(key, value) {
-                return key === "" ? value : decodeURIComponent(value);
-            }) : {};
+    var query = search ? JSON.parse('{"' + search.replace(/&/g, '","').
+            replace(/=/g, '":"') + '"}') : {};
+
+    query = $d.map(query, function(k, v) {
+        return decodeURIComponent(v);
+    });
     return query;
 };
 
