@@ -196,7 +196,7 @@ $d.log = function(msg) {
 };
 
 /**
- * Mapp object recursively with callback function
+ * Map object recursively with callback function
  *
  * @param {object} obj
  * @param {callback} f callback
