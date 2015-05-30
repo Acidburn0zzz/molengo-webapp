@@ -28,6 +28,11 @@ class IndexController extends AppController
     public function load()
     {
         $arrReturn = array();
+
+        // Model examples
+        //$user = new \Model\UserModel();
+        //$user->demoQueryBuilder();
+
         $arrReturn['status'] = 1;
         return $arrReturn;
     }
